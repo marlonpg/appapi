@@ -1,5 +1,7 @@
-#!/bin/env node
+// BASE SETUP
+// =============================================================================
 
+// call the packages we need
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
@@ -12,15 +14,7 @@ app.use(morgan('dev')); // log requests to the console
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var mongourl = "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/appapi";
-if (typeof self.ipaddress === "undefined") {
-	//  Log errors on OpenShift but continue w/ 127.0.0.1 - this
-	//  allows us to run/test the app locally.
-	console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-	self.ipaddress = "127.0.0.1";
-};
+var port     = process.env.PORT || 8080; // set our port
 
 var mongoose   = require('mongoose');
 mongoose.connect('mongodb://node:node@novus.modulusmongo.net:27017/Iganiq8o'); // connect to our database
@@ -123,9 +117,5 @@ app.use('/api', router);
 
 // START THE SERVER
 // =============================================================================
-
-app.listen(port, ipaddress, function() {
-	console.log('%s: Node server started on %s:%d ...', Date(Date.now() ), ipaddress, port);
-});
+app.listen(port);
 console.log('Magic happens on port ' + port);
-
