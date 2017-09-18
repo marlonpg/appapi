@@ -116,6 +116,9 @@ router.route('/bears/:bear_id')
 		});
 	});
 
+router.route('/test').get(function(req, res) {
+		res.json("OK");
+	});
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/api', router);
