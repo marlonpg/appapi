@@ -1,5 +1,5 @@
 {
-  "name": "node-api",
+  "name": "appapi",
   "main": "server.js",
   "repository": {
     "type": "git",
@@ -8,12 +8,9 @@
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Chris Sevilleja <scotch.io>",
+  "author": "MPGamba",
   "license": "MIT",
   "dependencies": {
-    "express": "~4.0.0",
-    "morgan": "~1.0.0",
-    "mongoose" : "~4.6.8",
-    "body-parser": "~1.0.1"
+    "express": "~4.0.0"
   }
 }
