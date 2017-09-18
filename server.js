@@ -5,10 +5,6 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
-var morgan     = require('morgan');
-
-// configure app
-app.use(morgan('dev')); // log requests to the console
 
 // configure body parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -126,5 +122,8 @@ app.use('/api', router);
 
 // START THE SERVER
 // =============================================================================
-app.listen(port);
+app.listen(port, ipaddress, function() {
+     console.log('%s: Node server started on %s:%d ...',
+    Date(Date.now() ), ipaddress, port);
+});
 console.log('Magic happens on port ' + port);
