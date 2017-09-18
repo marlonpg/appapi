@@ -2,7 +2,7 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-
+var MongoClient = require('mongodb').MongoClient;
 
 /**
  *  Define the sample application.
@@ -24,7 +24,7 @@ var SampleApp = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-
+		self.mongourl = "mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/appapi";
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
             //  allows us to run/test the app locally.
@@ -99,6 +99,22 @@ var SampleApp = function() {
             var link = "http://i.imgur.com/kmbjB.png";
             res.send("<html><body><img src='" + link + "'></body></html>");
         };
+		
+		self.routes['/createdb'] = function(req, res) {
+			var response;
+            MongoClient.connect(mongourl, function(err, db) {
+			  if (err){
+				response = err;
+			  }
+			  var myobj = { name: "Company Inc", address: "Highway 37" };
+			  db.collection("customers").insertOne(myobj, function(err, res) {
+				if (err) throw err;
+				response ="1 document inserted";
+				db.close();
+			  });
+			});
+			res.send("OKAAAAAA! :"+ response);
+        };
 
         self.routes['/'] = function(req, res) {
             res.setHeader('Content-Type', 'text/html');
@@ -145,6 +161,11 @@ var SampleApp = function() {
                         Date(Date.now() ), self.ipaddress, self.port);
         });
     };
+
+	
+
+	
+
 
 };   /*  Sample Application.  */
 
