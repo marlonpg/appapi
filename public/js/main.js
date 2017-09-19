@@ -28,7 +28,6 @@ function navigateToProductRegister(){
 }
 
 function initTimeLine(){
-    $('#search') = '';
     var result = getProducts();
     var list = $('#timelineResult');
     populateList(list, result);
@@ -43,7 +42,7 @@ function search(){
 }
 
 function getProducts() {
-    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter:$('#search').val()} )
+    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
     .done(function( data ) {
       return data;
     }).fail(function() {
