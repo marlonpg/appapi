@@ -118,6 +118,9 @@ nav ul li {
     padding: 5px;
 }
 
+nav ul a:hover {
+    color: orangered;
+}
 nav ul a {
     text-decoration: none;
     list-style-type: none;
@@ -172,4 +175,8 @@ nav ul a {
     line-height: 65px;
     padding-right: 5px;
     padding-top: 10px;
+}
+
+.onhover{
+    cursor: pointer;
 }
