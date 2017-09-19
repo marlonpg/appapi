@@ -1,6 +1,6 @@
 window.onload = function() {
     initMenu();
-	navigateTotSearch();
+	navigateToSearch();
 };
 
 function initMenu(){
@@ -8,8 +8,8 @@ function initMenu(){
     document.getElementById('leftnav').setAttribute("w3-include-html", "menu.html");
 	w3.includeHTML();
 }
-function navigateTotSearch(){
-    console.log("navigateTotSearch");
+function navigateToSearch(){
+    console.log("navigateToSearch");
     document.getElementById('main-content').setAttribute("w3-include-html", "search.html");
 	w3.includeHTML();
 }
