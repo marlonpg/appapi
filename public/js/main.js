@@ -45,10 +45,11 @@ function getProducts() {
     var result = $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
     .done(function( data ) {
         console.log(data);
-        return data;
+        return data.responseJSON;
     }).fail(function() {
         alert( "Internal server error!" );
     });
+    console.log("result =" + result);
     return result;
 }
 
