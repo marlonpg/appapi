@@ -66,6 +66,8 @@ app.get('/list_user', function (req, res) {
    res.send('Page Listing');
 })
 
-
+app.get('*', function(req, res) {
+        res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+});
 app.listen(port, ip);
 console.log("App listening at http://%s:%s", ip, port);
