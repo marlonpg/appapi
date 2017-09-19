@@ -1,6 +1,6 @@
 window.onload = function() {
     initMenu();
-	initSearch()
+	navigateTotSearch();
 };
 
 function initMenu(){
@@ -9,20 +9,20 @@ function initMenu(){
 	w3.includeHTML();
 }
 function navigateTotSearch(){
-    console.log("initSearch");
+    console.log("navigateTotSearch");
     document.getElementById('main-content').setAttribute("w3-include-html", "search.html");
 	w3.includeHTML();
 }
 
 function navigateToTimeLine(){
-    console.log("initTimeLine");
+    console.log("navigateToTimeLine");
     document.getElementById('main-content').setAttribute("w3-include-html", "timeline.html");
     w3.includeHTML();
     initTimeLine();
 }
 
 function navigateToProductRegister(){
-    console.log("initProductRegister");
+    console.log("navigateToProductRegister");
     document.getElementById('main-content').setAttribute("w3-include-html", "product-register.html");
 	w3.includeHTML();
 }
