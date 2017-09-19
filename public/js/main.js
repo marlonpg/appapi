@@ -42,12 +42,14 @@ function search(){
 }
 
 function getProducts() {
-    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
+    var result = $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
     .done(function( data ) {
-      return data;
+        console.log(data);
+        return data;
     }).fail(function() {
         alert( "Internal server error!" );
     });
+    return result;
 }
 
 function populateList(list, data){
