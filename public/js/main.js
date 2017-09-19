@@ -28,35 +28,55 @@ function navigateToProductRegister(){
 }
 
 function initTimeLine(){
-    var result = getProducts();
-    var list = $('#timelineResult');
-    populateList(list, result);
+    console.log('initTimeLine');
+    getProductsPaginated();
 }
 
-function search(){
-    var result = getProducts();
-    console.log(result);
-    var list = $('#result');
-    list.empty();
-    populateList(list, result);
-}
-
-function getProducts() {
-    var result = $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
-    .done(function( data ) {
+function getProductsPaginated() {
+    console.log('getProductsPaginated');
+    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {offset: 1, limit:5} )
+    .done(function(data) {
         console.log(data);
-        return data.responseJSON;
+        populateSearchList(data);
     }).fail(function() {
         alert( "Internal server error!" );
     });
-    console.log("result =" + result);
-    return result;
 }
 
-function populateList(list, data){
+function populateTimeLine(data){
+    console.log('populateTimeLine');
+    var list = $('#timelineResult');
     var items = [];
     $.each(data, function(i, item) {
         items.push('<li><div class="img" style="background-image:url(\'img' + item.imgurl+ '\');"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
     });
+    list.append( items.join('') );
+}
+
+function search(){
+    console.log('search');
+    getSearchProducts();
+
+}
+
+function getSearchProducts() {
+    console.log('getSearchProducts');
+    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
+    .done(function(data) {
+        console.log(data);
+        populateSearchList(data);
+    }).fail(function() {
+        alert( "Internal server error!" );
+    });
+}
+
+function populateSearchList(data){
+    console.log('populateSearchList');
+    var list = $('#result');
+    var items = [];
+    $.each(data, function(i, item) {
+        items.push('<li><div class="img" style="background-image:url(\'img' + item.imgurl+ '\');"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
+    });
+    list.empty();
     list.append( items.join('') );
 }
