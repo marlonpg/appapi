@@ -36,6 +36,18 @@ app.get('/products', function (req, res) {
    var products = [ {name : 'Cadeira de ferro', description: 'Cadeira de ferro verde em bom estado, otima para o jardim', imgurl: '/234567/cadeira-ferro.jpg' },{ name: 'Maquina fotografica da Nikon', description: 'Maquina usada poucas vezes vai com o cartao de memória da sandisk de 1.0gb\n O carregador  e o cabo para passar fotos para o computador \n E a capinha para guardar \nja vai carregada nao e a pilha \n esta funcionando perfeitamente Grava video tbm', imgurl: '/123456/maquina.jpg' }, {name : 'Cadeira de ferro', description: 'Cadeira de ferro verde em bom estado, otima para o jardim', imgurl: '/345678/televisao.jpg' }]
    res.setHeader("Pragma", "no-cache");
    res.setHeader("Cache-Control", "no-cache");
+       // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
    res.send(products);
 })
 
