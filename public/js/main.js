@@ -30,33 +30,19 @@ function initProductRegister(){
 function getProducts() {
     $.get( "http://appapi-gambasoftware.rhcloud.com/products",  )
     .done(function( data ) {
+      populateList(data);
       alert( "Data Loaded: " + data );
     }).fail(function() {
         alert( "error" );
     });
 }
-function getProducts2() {
-$.ajax({
-    type: "GET",
-    url: "http://appapi-gambasoftware.rhcloud.com/products",
-    data: data,
-    headers: {
-        'Pragma':'no-cache',
-        'Cache-Control':'no-cache'
-    },
-    complete: function(e, xhr, settings){
-       if(e.status === 200){
-            console.log(e.responseText);
-       }else{
-            console.log("error");
-       }
-   }
-   });
+
+function populateList(data){
+    var items = [];
+    console.log(data);
+    $.each(data, function(i, item) {
+        console.log(item);
+        items.push('<li><div class="img" style="background-image:url("img' + item.imgurl+ '");"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
+    });
+    $('#result').append( items.join('') );
 }
-/*
-$.get( "/products", { name: "John", time: "2pm" } )
-.done(function( data ) {
-  alert( "Data Loaded: " + data );
-}).fail(function() {
-    alert( "error" );
-});*/
