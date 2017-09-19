@@ -11,9 +11,28 @@ if (typeof ip === "undefined") {
     ip = "127.0.0.1";
 };
 
-app.get('/', function (req, res) {
-	res.send('Hello World');
-});
+
+app.get('/products', function (req, res) {
+   console.log("Get all products");
+   var products = [ {name : 'Cadeira de ferro', description: 'Cadeira de ferro verde em bom estado, otima para o jardim', imgurl: '/234567/cadeira-ferro.jpg' },{ name: 'Maquina fotografica da Nikon', description: 'Maquina usada poucas vezes vai com o cartao de memória da sandisk de 1.0gb\n O carregador  e o cabo para passar fotos para o computador \n E a capinha para guardar \nja vai carregada nao e a pilha \n esta funcionando perfeitamente Grava video tbm', imgurl: '/123456/maquina.jpg' }, {name : 'Cadeira de ferro', description: 'Cadeira de ferro verde em bom estado, otima para o jardim', imgurl: '/345678/televisao.jpg' }]
+   res.send(products);
+})
+
+app.post('/', function (req, res) {
+   console.log("Got a POST request for the homepage");
+   res.send('Hello POST');
+})
+
+app.delete('/del_user', function (req, res) {
+   console.log("Got a DELETE request for /del_user");
+   res.send('Hello DELETE');
+})
+
+app.get('/list_user', function (req, res) {
+   console.log("Got a GET request for /list_user");
+   res.send('Page Listing');
+})
+
 
 app.listen(port, ip);
 console.log("App listening at http://%s:%s", ip, port);
