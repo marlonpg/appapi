@@ -164,3 +164,11 @@ nav ul a {
     width: auto;
     height: auto;
 }
+
+#logout {
+    width: 50px;
+    float: left;
+    line-height: 65px;
+    padding-right: 5px;
+    padding-top: 10px;
+}
