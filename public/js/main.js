@@ -27,10 +27,17 @@ function initProductRegister(){
 }
 
 
+function search(){
+    var result = getProducts();
+    console.log(result);
+    $('#result').empty();
+    populateList(result);
+}
+
 function getProducts() {
     $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter:$('#search').val()} )
     .done(function( data ) {
-      populateList(data);
+      return data;
     }).fail(function() {
         alert( "Internal server error!" );
     });
