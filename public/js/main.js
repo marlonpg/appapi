@@ -42,7 +42,7 @@ function populateList(data){
     console.log(data);
     $.each(data, function(i, item) {
         console.log(item);
-        items.push('<li><div class="img" style="background-image:url("img' + item.imgurl+ '");"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
+        items.push('<li><div class="img" style="background-image:url(\'img' + item.imgurl+ '\');"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
     });
     $('#result').append( items.join('') );
 }
