@@ -37,7 +37,7 @@ function getProductsPaginated() {
     $.get( "http://appapi-gambasoftware.rhcloud.com/products", {offset: 1, limit:5} )
     .done(function(data) {
         console.log(data);
-        populateSearchList(data);
+        populateTimeLine(data);
     }).fail(function() {
         alert( "Internal server error!" );
     });
