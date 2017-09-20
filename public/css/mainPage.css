@@ -103,10 +103,12 @@ body {
 }
 
 nav {
+    position: fixed;
     float: left;
-    max-width: 160px;
-    margin: 0;
-    padding: 1em;
+    max-width: 130px;
+    margin: 10px;
+    padding: 5px;
+    background-color: darkgray;
 }
 
 nav ul {
