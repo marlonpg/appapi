@@ -105,9 +105,9 @@ body {
 nav {
     position: fixed;
     float: left;
-    max-width: 130px;
-    margin: 10px;
-    padding: 5px;
+    max-width: 140px;
+    margin-left: 10px;
+    margin-right: 10px;
     background-color: darkgray;
 }
 
