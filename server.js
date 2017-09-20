@@ -5,8 +5,6 @@ var ip = process.env.OPENSHIFT_NODEJS_IP;
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 if (typeof ip === "undefined") {
-    //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
-    //  allows us to run/test the app locally.
     console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
     ip = "127.0.0.1";
 };
@@ -19,19 +17,19 @@ app.get('/products', function (req, res) {
    res.send(products);
 });
 
-app.post('/', function (req, res) {
-   console.log("Got a POST request for the homepage");
+app.post('/product', function (req, res) {
+   console.log("Got a POST request to create a new product");
    res.send('Hello POST');
 });
 
-app.delete('/del_user', function (req, res) {
-   console.log("Got a DELETE request for /del_user");
+app.delete('/product', function (req, res) {
+   console.log("Got a DELETE request to delete a product");
    res.send('Hello DELETE');
 });
 
-app.get('/list_user', function (req, res) {
-   console.log("Got a GET request for /list_user");
-   res.send('Page Listing');
+app.get('/product', function (req, res) {
+   console.log("Got a GET request get product");
+   res.send('Page GET');
 });
 
 app.use('/', express.static('public/'));
