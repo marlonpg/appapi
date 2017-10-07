@@ -34,7 +34,7 @@ function initTimeLine(){
 
 function getProductsPaginated() {
     console.log('getProductsPaginated');
-    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {offset: 1, limit:5} )
+    $.get( "http://localhost:8080/products", {offset: 1, limit:5} )
     .done(function(data) {
         console.log(data);
         populateTimeLine(data);
@@ -61,7 +61,7 @@ function search(){
 
 function getSearchProducts() {
     console.log('getSearchProducts');
-    $.get( "http://appapi-gambasoftware.rhcloud.com/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
+    $.get( "http://localhost:8080/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
     .done(function(data) {
         console.log(data);
         populateSearchList(data);
@@ -80,3 +80,8 @@ function populateSearchList(data){
     list.empty();
     list.append( items.join('') );
 }
+
+$.post( "test.php", { name: "John", time: "2pm" })
+.done(function( data ) {
+  alert( "Data Loaded: " + data );
+});
