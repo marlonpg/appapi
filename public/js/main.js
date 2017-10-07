@@ -80,8 +80,3 @@ function populateSearchList(data){
     list.empty();
     list.append( items.join('') );
 }
-
-$.post( "test.php", { name: "John", time: "2pm" })
-.done(function( data ) {
-  alert( "Data Loaded: " + data );
-});
