@@ -60,10 +60,12 @@ app.post("/product", function(req, res) {
   console.log("Got a POST request to create a new product");
   if (!req.files) 
     return res.status(400).send("No files were uploaded.");
-  console.log('uploading file ' +req.files.filetoupload.name);
+  
+  console.log('Uploading file ' +req.files.filetoupload.name + '...');
+
   let filetoupload = req.files.filetoupload;
 
-  filetoupload.mv("uploads/" + req.files.filetoupload.name, function(err) {
+  filetoupload.mv("public/uploads/" + req.files.filetoupload.name, function(err) {
     if (err) return res.status(500).send(err);
     res.send("File uploaded!");
   });

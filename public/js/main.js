@@ -1,6 +1,6 @@
 window.onload = function() {
     initMenu();
-	navigateToSearch();
+    navigateToSearch();
 };
 
 function initMenu(){
@@ -81,7 +81,20 @@ function populateSearchList(data){
     list.append( items.join('') );
 }
 
-$.post( "test.php", { name: "John", time: "2pm" })
-.done(function( data ) {
-  alert( "Data Loaded: " + data );
-});
+function createNewProduct() {
+    console.log('createNewProduct');
+    $.ajax({
+        url:'http://localhost:8080/product',
+        method: 'POST',
+        contentType: false,
+        processData: false,
+        data: new FormData($('#prodregister')[0]),
+        success:function(){
+            alert("New product created with Success!");
+            window.location="http://localhost:8080/";
+        },
+        error:function(){
+            alert("Error create new product, please try again later!");
+        },
+    });
+}
