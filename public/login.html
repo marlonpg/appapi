@@ -1,4 +1,4 @@
-<div>
+<div class="form-login">
     <h3>Log in</h3>
     <form id='signup'action = "http://localhost:8080/login" method = "POST">
         Email:<br>
@@ -6,6 +6,6 @@
         Password:<br>
         <input type="password" name="password"><br>
         <input type="button" value="Login" onclick="login()"><br>
-        <span>Don't have an account? </span> <a href="" onclick="signup()">Sign up</a>
+        <span>Don't have an account? </span> <span class="form-login-link" onclick="initSignup()">Sign up</span>
     </form>
 </div>

@@ -183,9 +183,19 @@ nav ul a {
     cursor: pointer;
 }
 
+.form-login-link{
+    cursor: pointer;
+    color: blue;
+}
+
 #arrowdown {
     width: 100px;
     bottom: 0px;
     position: absolute;
     margin-bottom: 30px;
+}
+
+.form-login {
+    width:250px; 
+    margin:0 auto;
 }

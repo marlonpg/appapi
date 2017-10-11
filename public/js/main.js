@@ -1,13 +1,33 @@
 window.onload = function() {
-    initMenu();
-    navigateToSearch();
+    //initMenu();
+    //navigateToSearch();
+    initLogin();
 };
+
+function initLogin(){
+    console.log("initLogin");
+    document.getElementById('main-content').setAttribute("w3-include-html", "login.html");
+	w3.includeHTML();
+}
+
+function initSignup(){
+    console.log("initSignup");
+    document.getElementById('main-content').setAttribute("w3-include-html", "signup.html");
+	w3.includeHTML();
+}
+
+function initUserInfo(){
+    console.log("initUserInfo");
+    document.getElementById('userLogin').setAttribute("w3-include-html", "user-info.html");
+	w3.includeHTML();
+}
 
 function initMenu(){
     console.log("initMenu");
     document.getElementById('leftnav').setAttribute("w3-include-html", "menu.html");
 	w3.includeHTML();
 }
+
 function navigateToSearch(){
     console.log("navigateToSearch");
     document.getElementById('main-content').setAttribute("w3-include-html", "search.html");
@@ -32,69 +52,9 @@ function initTimeLine(){
     getProductsPaginated();
 }
 
-function getProductsPaginated() {
-    console.log('getProductsPaginated');
-    $.get( "http://localhost:8080/products", {offset: 1, limit:5} )
-    .done(function(data) {
-        console.log(data);
-        populateTimeLine(data);
-    }).fail(function() {
-        alert( "Internal server error!" );
-    });
-}
-
-function populateTimeLine(data){
-    console.log('populateTimeLine');
-    var list = $('#timelineResult');
-    var items = [];
-    $.each(data, function(i, item) {
-        items.push('<li><div class="img" style="background-image:url(\'img' + item.imgurl+ '\');"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
-    });
-    list.append( items.join('') );
-}
-
 function search(){
     console.log('search');
     getSearchProducts();
 
 }
 
-function getSearchProducts() {
-    console.log('getSearchProducts');
-    $.get( "http://localhost:8080/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
-    .done(function(data) {
-        console.log(data);
-        populateSearchList(data);
-    }).fail(function() {
-        alert( "Internal server error!" );
-    });
-}
-
-function populateSearchList(data){
-    console.log('populateSearchList');
-    var list = $('#result');
-    var items = [];
-    $.each(data, function(i, item) {
-        items.push('<li><div class="img" style="background-image:url(\'img' + item.imgurl+ '\');"></div><div class="result-text"><a href="#" class="text-align">' + item.name + '</a><br><span class="text-align">' + item.description + '</span></div></li>');
-    });
-    list.empty();
-    list.append( items.join('') );
-}
-
-function createNewProduct() {
-    console.log('createNewProduct');
-    $.ajax({
-        url:'http://localhost:8080/product',
-        method: 'POST',
-        contentType: false,
-        processData: false,
-        data: new FormData($('#prodregister')[0]),
-        success:function(){
-            alert("New product created with Success!");
-            window.location="http://localhost:8080/";
-        },
-        error:function(){
-            alert("Error create new product, please try again later!");
-        },
-    });
-}
