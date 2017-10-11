@@ -28,6 +28,11 @@ function initMenu(){
 	w3.includeHTML();
 }
 
+function initTimeLine(){
+    console.log('initTimeLine');
+    getProductsPaginated();
+}
+
 function navigateToSearch(){
     console.log("navigateToSearch");
     document.getElementById('main-content').setAttribute("w3-include-html", "search.html");
@@ -45,11 +50,6 @@ function navigateToProductRegister(){
     console.log("navigateToProductRegister");
     document.getElementById('main-content').setAttribute("w3-include-html", "product-register.html");
 	w3.includeHTML();
-}
-
-function initTimeLine(){
-    console.log('initTimeLine');
-    getProductsPaginated();
 }
 
 function search(){

@@ -81,6 +81,11 @@ app.get("/product", function(req, res) {
   res.send("Page GET");
 });
 
+app.get("/logout", function(req, res) {
+  console.log("Logout");
+  res.send("You have been logged out of the system!");
+});
+
 app.use("/", express.static("public/"));
 
 app.listen(port, ip);
