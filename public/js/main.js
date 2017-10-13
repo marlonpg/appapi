@@ -1,7 +1,8 @@
 window.onload = function() {
-    //initMenu();
+    initMenu();
     //navigateToSearch();
-    initLogin();
+    login();
+    //initLogin();
 };
 
 function initLogin(){
@@ -43,8 +44,24 @@ function navigateToTimeLine(){
     console.log("navigateToTimeLine");
     document.getElementById('main-content').setAttribute("w3-include-html", "timeline.html");
     w3.includeHTML();
-    initTimeLine();
+    waitFinishRender("#timelineResult").then(function(){
+        initTimeLine();
+        initTimeLine();
+        initTimeLine();
+    });
 }
+
+var waitFinishRender = function(id) {
+    return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+          if($(id).length > 0){
+            resolve();
+          }
+        }, 100);
+    });
+  };
+  
+
 
 function navigateToProductRegister(){
     console.log("navigateToProductRegister");
@@ -55,6 +72,13 @@ function navigateToProductRegister(){
 function search(){
     console.log('search');
     getSearchProducts();
-
 }
 
+//timeline
+$(window).scroll(function() {
+    if(document.getElementById("timelineResult")){
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+            getProductsPaginated();
+        }
+    }
+});

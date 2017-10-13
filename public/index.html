@@ -1,23 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="css/mainPage.css"/>
+	<!-- Required meta tags always come first -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	
+	<link rel="stylesheet" type="text/css" href="css/custom.css"/>
+
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js" ></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" ></script>
+		
+	<link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+	
     <script src="https://www.w3schools.com/lib/w3.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/service.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 	
 </head>
 <body>
-	<div class="header" >
-		<h1>UTY</h1>
-		<div id="userLogin"></div>
+	<header>		
+		<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+			<div class="container">
+				<a class="navbar-brand" href="#">Sharing</a>
+				<ul class="nav navbar-nav">
+					<li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+					<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+					<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+					<li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+				</ul>
+				<div class="pull-xs-right" id="userLogin"></div>
+			</div>
+		</nav>
+	</header>
+	<div class="leftnav" id="leftnav"></div>
+	<div class="container">
+		<div class="content">
+			
+			<div class="search" id="main-content"></div>
+		</div>
 	</div>
-	<div class="content">
-		<div id="leftnav"></div>
-		<div class="search" id="main-content"></div>
-	</div>
-	<div class="footer">Copyright &copy; GambaSoftware</div>
+	<footer class="footer">
+			<div class="container">
+		Copyright &copy; GambaSoftware
+				</div>
+	</footer>
 </body>
 </html>
     
