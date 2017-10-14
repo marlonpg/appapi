@@ -3,7 +3,7 @@ function login(){
     initMenu();
     //navigateToSearch();
     navigateToTimeLine();
-    //initUserInfo();
+    initUserInfo();
 }
 
 function logoutUser(){
