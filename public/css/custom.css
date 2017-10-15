@@ -1,5 +1,5 @@
-header {
-top: 0;
+body {
+    padding-top: 70px;    
 }
 
 .form-login{
@@ -57,12 +57,11 @@ top: 0;
 }
 
 
-.leftnav ul {
-    margin-top:200px;
+.leftnav {
     float:left;
 }
 
-.leftnav ul div button{
+.leftnav div button{
     color: white;
     background-color: #373a3c;
 }

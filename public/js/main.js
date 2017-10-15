@@ -1,8 +1,8 @@
 window.onload = function() {
     initMenu();
     //navigateToSearch();
-    login();
-    //initLogin();
+    //login();
+    initLogin();
 };
 
 function initLogin(){
@@ -50,7 +50,7 @@ function navigateToTimeLine(){
         initTimeLine();
     });
 }
-
+//Promise to wait until div is rendered
 var waitFinishRender = function(id) {
     return new Promise(function(resolve, reject) {
         setTimeout(function() {
