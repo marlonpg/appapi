@@ -40,6 +40,12 @@ function navigateToSearch(){
 	w3.includeHTML();
 }
 
+function navigateToContactUs(){
+    console.log("navigateToContactUs");
+    document.getElementById('main-content').setAttribute("w3-include-html", "contactus.html");
+	w3.includeHTML();
+}
+
 function navigateToTimeLine(){
     console.log("navigateToTimeLine");
     document.getElementById('main-content').setAttribute("w3-include-html", "timeline.html");
@@ -82,3 +88,15 @@ $(window).scroll(function() {
         }
     }
 });
+
+//google-maps
+/*function myMap() {
+    var mapOptions = {
+        center: new google.maps.LatLng(-30.016399, -51.161117),
+        zoom: 100,
+        mapTypeId: google.maps.MapTypeId.HYBRID
+    }
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu-916DdpKAjTmJNIgngS6HL_kDIKU0aU&callback=myMap"></script>
+*/
