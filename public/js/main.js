@@ -72,7 +72,14 @@ var waitFinishRender = function(id) {
 function navigateToProductRegister(){
     console.log("navigateToProductRegister");
     document.getElementById('main-content').setAttribute("w3-include-html", "product-register.html");
-	w3.includeHTML();
+    w3.includeHTML();
+    w3.includeHTML(myCallback);
+    
+    function myCallback() {
+        $('input[type=date]').datepicker({
+            dateFormat: 'yy-mm-dd'
+        }); 
+    }
 }
 
 function search(){
