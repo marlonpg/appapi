@@ -57,7 +57,7 @@ function jsonToMediaObject(data){
     });
     return items;
 }
-
+//ALTERNATIVE FILE UPLOADING
 function createNewProduct() {
     console.log('createNewProduct');
     $.ajax({

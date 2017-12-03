@@ -159,30 +159,28 @@ angular.module('doeApp')
                         $scope.message = "Error: "+response.status + " " + response.statusText;
                     }
             );
-        }]).controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {
-            $scope.showTimeline = false;
-            $scope.message = "Loading ...";
-			$scope.productRegisterFactory = new productRegisterFactory();
-			$scope.productRegisterFactory.data = 'some data';
-            $scope.items = productRegisterFactory.saveProduct().save()
-                .$promise.then(
-                    function(response) {
-                        $scope.items = response;
-                        $scope.showTimeline = true;
-                    },
-                    function(response) {
-                        $scope.message = "Error: "+response.status + " " + response.statusText;
-                    }
-            );
-			
-			$scope.entry = new Entry(); //You can instantiate resource class
-
-			$scope.entry.data = 'some data';
-
-			Entry.save($scope.entry, function() {
-			//data saved. do something here.
-			});
         }])
-		
-
+		/* NOT WORKING YET
+		.controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {
+            $scope.isUploading = false;
+            $scope.message = "Loading ...";
+			$scope.saveProduct = function () {
+				$scope.isUploading = true;
+				$scope.productRegisterFactory = new productRegisterFactory();
+				$scope.productRegisterFactory.data = new FormData($('#prodregister')[0]);
+				$scope.items = productRegisterFactory.save()
+					.$promise.then(
+						function(response) {
+							$scope.items = response;
+							$scope.isUploading = false;
+							alert("New product created with Success!");
+						},
+						function(response) {
+							$scope.isUploading = false;
+							$scope.message = "Error: "+response.status + " " + response.statusText;
+							alert("Error to connect to server, please try again later!");
+						}
+				);
+			}
+        }])*/
 ;
