@@ -1,5 +1,6 @@
 body {
     padding-top: 70px;    
+	font-size: 16px;
 }
 
 .form-login{
@@ -15,16 +16,25 @@ body {
     padding: 4px;
 }
 
-.footer {
-    background-color: orangered;
-    color: white;
-    bottom: 0;
-    text-align: center;
-    width:  100%;
-    position: fixed;
-
+.row-header {
+  margin: 0px auto;
+  padding: 0px 0px;
 }
 
+.row-content {
+  margin: 0px auto;
+  border-bottom: 1px ridge;
+  min-height: 400px;
+}
+
+.row-footer {
+	background-color: orangered;
+	color: white;
+	bottom: 0;
+	text-align: center;
+	width:  100%;
+	position: fixed;
+}
 .img {
     position: relative;
     float: left;
@@ -56,7 +66,6 @@ body {
     margin-bottom: 30px;
 }
 
-
 .leftnav {
     float:left;
 }
@@ -67,5 +76,8 @@ body {
 }
 
 #btn-doeagora {
-	margin-top: 13px;
+	background-color: orangered;
+	color:white;
 }
+
+

@@ -67,7 +67,6 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                 views: {
                     'content@': {
                         templateUrl : 'views/product-register.html',
-                        controller  : 'ProductRegisterController'
                     }
                 }
             });

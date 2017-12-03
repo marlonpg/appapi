@@ -74,78 +74,6 @@ angular.module('doeApp')
             };
         }])
 
-        .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
-            $scope.showDish = false;
-            $scope.message = "Loading ...";
-            $scope.dish = menuFactory.getDishes().get({id: parseInt($stateParams.id, 10)})
-                .$promise.then(
-                    function(response) {
-                        $scope.dish = response;
-                        $scope.showDish = true;
-                    },
-                    function(response) {
-                        $scope.message = "Error: "+response.status + " " + response.statusText;
-                    }
-            );
-        }])
-
-        .controller('DishCommentController', ['$scope', 'menuFactory', function($scope, menuFactory) {
-            $scope.mycomment = {rating:5, comment:"", author:"", date:""};
-            $scope.ratings = [1, 2, 3, 4, 5];
-
-            $scope.submitComment = function () {
-                $scope.mycomment.date = new Date().toISOString();
-                console.log($scope.mycomment);
-                $scope.dish.comments.push($scope.mycomment);
-
-                menuFactory.getDishes().update({id:$scope.dish.id}, $scope.dish);
-
-                $scope.commentForm.$setPristine();
-                $scope.mycomment = {rating:5, comment:"", author:"", date:""};
-            };
-        }])
-
-        .controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory', function($scope, menuFactory, corporateFactory) {
-            $scope.showDish = false;
-            $scope.message="Loading ...";
-            $scope.dish = menuFactory.getDishes().get({id:0})
-                .$promise.then(
-                    function(response) {
-                        $scope.dish = response;
-                        $scope.showDish = true;
-                    },
-                    function(response) {
-                        $scope.message = "Error: " + response.status + " " + response.statusText;
-                    }
-                );
-
-            $scope.showPromotion = false;
-            $scope.promotionMessage = "Loading...";
-            $scope.promotion = menuFactory.getPromotion(0).get()
-                .$promise.then(
-                    function(response) {
-                        $scope.promotion = response;
-                        $scope.showPromotion = true;
-                    },
-                    function(response) {
-                        $scope.promotionMessage = "Error: " + response.status + " " + response.statusText;
-                    }
-                );
-
-            $scope.showLeader = true;
-            $scope.leaderStatus = "Loading...";
-            $scope.leader = corporateFactory.getLeader(3).get()
-                .$promise.then(
-                    function(response) {
-                        $scope.leader = response;
-                        $scope.showLeader = true;
-                    },
-                    function(response) {
-                      $scope.leaderStatus = "Error: " + response.status + " " + response.statusText;
-                    }
-                );
-
-        }]) 
 		.controller('TimelineController', ['$scope', 'timelineFactory', function($scope, timelineFactory) {
             $scope.showTimeline = false;
             $scope.message = "Loading ...";
@@ -159,6 +87,10 @@ angular.module('doeApp')
                         $scope.message = "Error: "+response.status + " " + response.statusText;
                     }
             );
+        }])
+		.controller('LoginController', ['$scope', 'loginService', function($scope, loginService) {
+            $scope.showLogin = false;
+            $scope.message = "Loading ...";
         }])
 		/* NOT WORKING YET
 		.controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {
