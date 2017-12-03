@@ -54,6 +54,15 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                     }
                 }
             })
+			.state('app.signup', {
+                url: 'signup',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/signup.html',
+                        controller  : 'SignupController'
+                    }
+                }
+            })
 			.state('app.timeline', {
                 url: 'timeline',
                 views: {

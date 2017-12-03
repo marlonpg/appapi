@@ -1,9 +1,9 @@
 function login(){
     //call service to do the authentication
-    initMenu();
+    //initMenu();
     //navigateToSearch();
-    navigateToTimeLine();
-    initUserInfo();
+    //navigateToTimeLine();
+    //initUserInfo();
 }
 
 function logoutUser(){

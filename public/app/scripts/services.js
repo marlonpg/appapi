@@ -22,6 +22,18 @@ angular.module('doeApp')
     };
     return timelineFactory;
   }])
+  
+    .service('loginService', ['$resource', 'baseURL', function($resource, baseURL) {
+    this.login = function() {
+        return $resource(baseURL + "login");
+    };
+  }])
+  
+      .service('signupService', ['$resource', 'baseURL', function($resource, baseURL) {
+    this.login = function() {
+        return $resource(baseURL + "signup");
+    };
+  }])
   //NOT WORKING YET
 /*  .factory('productRegisterFactory', ['$resource', 'baseURL', function($resource, baseURL) {
 	return $resource(baseURL + "product");

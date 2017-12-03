@@ -92,6 +92,10 @@ angular.module('doeApp')
             $scope.showLogin = false;
             $scope.message = "Loading ...";
         }])
+		.controller('SignupController', ['$scope', 'signupService', function($scope, signupService) {
+            $scope.showLogin = false;
+            $scope.message = "Loading ...";
+        }])
 		/* NOT WORKING YET
 		.controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {
             $scope.isUploading = false;

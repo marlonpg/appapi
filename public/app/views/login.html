@@ -1,11 +1,19 @@
-<div class="container">
-    <form class="form-login" action = "http://localhost:8080/login" method = "POST">
+<div class="container" ng-controller="LoginController">
+    <form class="form-login" name="loginForm" novalidate>
         <h2>Sign in</h2>
-        <label for="inputEmail" class="sr-only"></label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
-        <span>Don't have an account? </span> <span class="form-login-link" onclick="initSignup()">Sign up</span>
+		<!-- email -->
+		<div class="form-group"  ng-class="{ 'has-danger' : loginForm.email.$invalid && !loginForm.email.$pristine }">
+			<input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="user.email" required>
+			<span ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+			<span ng-show="(loginForm.email.$invalid || loginForm.email.$error.required) && !loginForm.email.$pristine" class="form-text">Enter a valid email address.</span>
+		</div>
+		<!-- password -->
+        <div class="form-group" ng-class="{ 'has-danger' : loginForm.password.$invalid && !loginForm.password.$pristine }">
+            <input type="password" name="password" class="form-control" ng-model="user.password" placeholder="Password" required>
+            <p ng-show="loginForm.password.$invalid && !loginForm.password.$pristine" class="form-text">Enter your password.</p>
+            <p ng-show="(loginForm.password.$invalid || loginForm.password.$error.required) && !loginForm.email.$pristine" class="form-text">Enter your password.</p>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="login()" ng-disabled="loginForm.$invalid">Sign in</button>
+        <span>Don't have an account? </span> <a class="form-login-link" ui-sref="app.signup">Sign up</a>
     </form>
 </div>
