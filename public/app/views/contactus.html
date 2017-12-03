@@ -1,0 +1,93 @@
+<div class="container" ng-controller="ContactController">   
+	<div class="row">
+		<div class="col-xs-12">
+		   <ul class="breadcrumb">
+			   <li><a href="#">Home</a></li>
+			   <li class="active">Contact Us</li>
+		   </ul>
+		</div>
+		<div class="col-xs-12">
+		   <h3>Contact and Help Information</h3>
+		   <hr>
+		</div>
+	</div> 
+    <div class="row row-content">
+	   <div class="col-xs-12">
+		  <h3>Location Information</h3> 
+	   </div>
+        <div class="col-xs-12 col-sm-4 col-sm-offset-1">
+                <h5>Address</h5>
+                <address style="font-size: 100%">
+                    Rua Antônio Joaquim Mesquita, 1000<br>
+                    Porto Alegre, RS<br>
+                    Brazil<br>
+                    <i class="fa fa-phone"></i>: +5551 9999-9999<br>
+                    <i class="fa fa-fax"></i>: +5551 9999-9999<br>
+                    <i class="fa fa-envelope"></i>: 
+                    <a href="mailto:marlonpgamba@gmail.com ">marlonpgamba@gmail.com</a>
+                </address>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-sm-offset-1">
+            <h5>Find us on Google Maps</h5>
+                <div id="map" style="width:400px;height:400px;background:yellow"></div>
+        </div>
+
+	<div class="row row-content">
+	   <div class="col-xs-12">
+		  <h3>Send us your Feedback</h3> 
+	   </div>
+		<div class="col-xs-12 col-sm-9">
+			<form class="form-horizontal" name="feedbackForm" ng-submit="sendFeedback()" novalidate>
+				<div class="form-group" ng-class="{ 'has-error' : feedbackForm.firstname.$error.required && !feedbackForm.firstname.$pristine }">
+					<label for="firstname" class="col-sm-2 control-label">First Name</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter First Name"
+					ng-model="feedback.firstName" required>
+						<span ng-show="feedbackForm.firstname.$error.required && !feedbackForm.firstname.$pristine" class="help-block">Your First name is required.</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="telnum" class="col-sm-2 control-label">Telefone para contato</label>
+					<div class="col-xs-4 col-sm-4 col-md-4">
+								<input type="tel" class="form-control" id="telnum" name="telnum" placeholder="Tel. number"
+								ng-model="feedback.tel.number">
+					</div>
+				</div>
+				<div class="form-group"  ng-class="{ 'has-error has-feedback' : feedbackForm.emailid.$invalid && !feedbackForm.emailid.$pristine }">
+					<label for="emailid" class="col-sm-2 control-label">Email</label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control" id="emailid" name="emailid" placeholder="Email"
+						ng-model="feedback.email" required>
+						<span ng-show="feedbackForm.emailid.$invalid && !feedbackForm.emailid.$pristine" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+					<span ng-show="(feedbackForm.emailid.$invalid ||
+									feedbackForm.emailid.$error.required) &&
+									!feedbackForm.emailid.$pristine"
+						 class="help-block">Enter a valid email address.</span>
+					</div>
+				</div>                
+				<div class="form-group">
+					<label for="feedback" class="col-sm-2 control-label">Your Feedback</label>
+					<div class="col-sm-10">
+						<textarea class="form-control" rows="12"
+							ng-model="feedback.comments">
+						</textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-primary" ng-disabled="feedbackForm.$invalid">Send Feedback</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		 <div class="col-xs-12 col-sm-3">
+		  <h3>Your Current Feedback:</h3>
+		  <p>{{feedback.firstName}}</p>
+		  <p>Contact Tel.:{{feedback.tel.number}}</p>
+		  <p>Contact Email: {{feedback.email}}</p>
+		  <p>Comments: {{feedback.comments}}</p>
+		</div>
+   </div>
+
+</div>
+

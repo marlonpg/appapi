@@ -1,0 +1,23 @@
+<div class="container" ng-controller="TimelineController">
+	<div class="jumbotron">
+			<h1>Newsfeed</h1>
+			<p>Here you can see the most recent ads.</p>
+			<video src="images/storyofstuff.mp4" controls autoplay></video>
+	</div>
+	<div class="col-xs-12" ng-if="!showTimeline">
+		<h3>{{message}}</h3>
+	</div>
+	<div ng-if="showTimeline">
+		<ul id="timelineResult" class="result" style="list-style-type:none">
+			<li ng-repeat="item in items | orderBy:orderText">
+				<div class="media">
+					<div class="media-left">
+						<a href="#"><div class="img media-object" style="background-image:url(\images{{item.imgurl}}"></div></a>
+					</div>
+				<div class="media-body">
+					<h4 class="media-heading onhover">{{item.name}}</h4>{{item.description}}</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

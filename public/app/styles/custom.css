@@ -1,0 +1,71 @@
+body {
+    padding-top: 70px;    
+}
+
+.form-login{
+    max-width: 500px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.img-circle {
+    border-radius: 50%;
+    width: 40px;
+    border: 1px;
+    padding: 4px;
+}
+
+.footer {
+    background-color: orangered;
+    color: white;
+    bottom: 0;
+    text-align: center;
+    width:  100%;
+    position: fixed;
+
+}
+
+.img {
+    position: relative;
+    float: left;
+    width:  100px;
+    height: 100px;
+    background-position: 50% 50%;
+    background-repeat:   no-repeat;
+    background-size:     cover;
+}
+
+.result li {
+    margin-top: 15px;
+}
+
+
+.onhover:hover{
+    cursor: pointer;
+    color: orangered;
+}
+
+.search li:hover{
+    background-color: lightgray;
+}
+
+#arrowdown {
+    width: 100px;
+    bottom: 0px;
+    position: absolute;
+    margin-bottom: 30px;
+}
+
+
+.leftnav {
+    float:left;
+}
+
+.leftnav div button{
+    color: white;
+    background-color: #373a3c;
+}
+
+#btn-doeagora {
+	margin-top: 13px;
+}
