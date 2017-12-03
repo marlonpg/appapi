@@ -65,7 +65,7 @@ app.post("/product", function(req, res) {
 
   let filetoupload = req.files.filetoupload;
 
-  filetoupload.mv("public/uploads/" + req.files.filetoupload.name, function(err) {
+  filetoupload.mv("public/app/images/uploads/" + req.files.filetoupload.name, function(err) {
     if (err) return res.status(500).send(err);
     res.send("File uploaded!");
   });

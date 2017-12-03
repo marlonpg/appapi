@@ -145,15 +145,8 @@ angular.module('doeApp')
                     }
                 );
 
-        }])
-
-        .controller('AboutController', ['$scope', function($scope) {
-
-            $scope.showLeaders = true;
-            $scope.leadersStatus = "Loading...";
-
-        }])        
-		.controller('TimelineController', ['$scope', '$stateParams', 'timelineFactory', function($scope, $stateParams, timelineFactory) {
+        }]) 
+		.controller('TimelineController', ['$scope', 'timelineFactory', function($scope, timelineFactory) {
             $scope.showTimeline = false;
             $scope.message = "Loading ...";
             $scope.items = timelineFactory.getTimelineProducts().query()
@@ -166,5 +159,30 @@ angular.module('doeApp')
                         $scope.message = "Error: "+response.status + " " + response.statusText;
                     }
             );
+        }]).controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {
+            $scope.showTimeline = false;
+            $scope.message = "Loading ...";
+			$scope.productRegisterFactory = new productRegisterFactory();
+			$scope.productRegisterFactory.data = 'some data';
+            $scope.items = productRegisterFactory.saveProduct().save()
+                .$promise.then(
+                    function(response) {
+                        $scope.items = response;
+                        $scope.showTimeline = true;
+                    },
+                    function(response) {
+                        $scope.message = "Error: "+response.status + " " + response.statusText;
+                    }
+            );
+			
+			$scope.entry = new Entry(); //You can instantiate resource class
+
+			$scope.entry.data = 'some data';
+
+			Entry.save($scope.entry, function() {
+			//data saved. do something here.
+			});
         }])
+		
+
 ;

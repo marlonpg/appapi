@@ -21,7 +21,12 @@ angular.module('doeApp')
     };
 
     return timelineFactory;
+  }]).service('productRegisterFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+
+    this.saveProduct = function() {
+        return $resource(baseURL + "products"
+            {'save': {method: 'POST'}});
+    };
   }])
 ;
-
 
