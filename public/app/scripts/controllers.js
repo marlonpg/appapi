@@ -1,63 +1,15 @@
 'use strict';
 
 angular.module('doeApp')
-
-        .controller('MenuController', ['$scope', 'menuFactory', function($scope, menuFactory) {
-
-            $scope.tab = 1;
-            $scope.filtText = '';
-            $scope.showDetails = false;
-            $scope.showMenu = false;
-            $scope.message = "Loading ...";
-
-            $scope.dishes = menuFactory.getDishes().query(
-                function(response) {
-                    $scope.dishes = response;
-                    $scope.showMenu = true;
-                },
-                function(response) {
-                    $scope.message = "Error: "+response.status + " " + response.statusText;
-            });
-
-            $scope.select = function(setTab) {
-                $scope.tab = setTab;
-
-                if (setTab === 2) {
-                    $scope.filtText = "appetizer";
-                }
-                else if (setTab === 3) {
-                    $scope.filtText = "mains";
-                }
-                else if (setTab === 4) {
-                    $scope.filtText = "dessert";
-                }
-                else {
-                    $scope.filtText = "";
-                }
-            };
-
-            $scope.isSelected = function (checkTab) {
-                return ($scope.tab === checkTab);
-            };
-
-            $scope.toggleDetails = function() {
-                $scope.showDetails = !$scope.showDetails;
-            };
-        }])
-
         .controller('ContactController', ['$scope', function($scope) {
-
+/*
             $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
 
             var channels = [{value:"tel", label:"Tel."}, {value:"Email",label:"Email"}];
 
             $scope.channels = channels;
             $scope.invalidChannelSelection = false;
-        }])
-
-        .controller('FeedbackController', ['$scope', 'feedbackFactory', function($scope, feedbackFactory) {
-
-            $scope.sendFeedback = function() {
+			$scope.sendFeedback = function() {
                 console.log($scope.feedback);
 
                 if ($scope.feedback.agree && ($scope.feedback.mychannel === "")) {
@@ -71,7 +23,7 @@ angular.module('doeApp')
                     $scope.feedbackForm.$setPristine();
                     console.log($scope.feedback);
                 }
-            };
+            };*/
         }])
 
 		.controller('TimelineController', ['$scope', 'timelineFactory', function($scope, timelineFactory) {
@@ -88,13 +40,44 @@ angular.module('doeApp')
                     }
             );
         }])
+		
 		.controller('LoginController', ['$scope', 'loginService', function($scope, loginService) {
             $scope.showLogin = false;
             $scope.message = "Loading ...";
+			$scope.login = function(){
+				$scope.showLoading = true;
+				loginService.login().get($scope.user).$promise.then(
+                    function(response) {
+                        //response.user;
+						$scope.user = {email:"", password:""};
+						$scope.signupForm.$setPristine();
+						$scope.showLoading = false;
+                    },
+                    function(response) {
+                        $scope.message = "Error: "+response.status + " " + response.statusText;
+                    }
+				);
+			}
         }])
+		
 		.controller('SignupController', ['$scope', 'signupService', function($scope, signupService) {
-            $scope.showLogin = false;
+            $scope.showLoading = false;
             $scope.message = "Loading ...";
+			$scope.signup = function(){
+				$scope.showLoading = true;
+				signupService.signup().save($scope.user).$promise.then(
+                    function(response) {
+                        //response.user;
+						$scope.user = {name:"", email:"", password:""};
+						$scope.signupForm.$setPristine();
+						$scope.showLoading = false;
+                    },
+                    function(response) {
+                        $scope.message = "Error: "+response.status + " " + response.statusText;
+                    }
+            );
+
+			}
         }])
 		/* NOT WORKING YET
 		.controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {

@@ -124,6 +124,23 @@ app.get('/setupAdmin', function(req, res) {
   });
 });
 
+app.get('/signup', function(req, res) {
+	console.log("TEST setupAdmin ");
+	var admin = new User({ 
+		email: 'test@gmail.com', 
+		password: 'password',
+		admin: true 
+	});
+	
+	admin.save(function(err){
+      if(err){
+           console.log(err);
+           return;
+      }
+
+      res.json({ admin: admin });
+  });
+});
 
 // API ROUTES -------------------
 // get an instance of the router for api routes
@@ -155,7 +172,7 @@ routes.post('/authenticate', function(req, res) {
       admin: user.admin 
     };
         var token = jwt.sign(payload, app.get('superSecret'), {
-          expiresInMinutes: 60 // expires in 24 hours
+          expiresInMinutes: 1//60 // expires in 24 hours
         });
 
         // return the information including token as JSON
@@ -168,6 +185,35 @@ routes.post('/authenticate', function(req, res) {
     }
   });
 });
+
+routes.post('/signup', function(req, res) {
+
+	setTimeout(timeoutTest, 10000);
+	var name = req.body.name;
+	var email = req.body.email;
+	var password = req.body.password;
+	
+	console.log("Creating new User - NAME: %s - EMAIL: %s - PASSWORD: %s", name, email, password);
+	var newUser = new User({ 
+		name: name,
+		email: email, 
+		password: password,
+		admin: false 
+	});
+	function timeoutTest() {
+		console.log('Testing loading stuff');
+		newUser.save(function(err){
+		if(err){
+			console.log(err);
+			return;
+		}
+
+		res.json({ user: newUser });
+		});
+	}
+
+});
+
 
 // route middleware to verify a token
 routes.use(function(req, res, next) {

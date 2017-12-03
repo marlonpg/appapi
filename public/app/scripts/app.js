@@ -36,15 +36,6 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                     }
                 }
             })
-            .state('app.menu', {
-                url: 'menu',
-                views: {
-                    'content@': {
-                        templateUrl : 'views/menu.html',
-                        controller  : 'MenuController'
-                    }
-                }
-            })
             .state('app.login', {
                 url: 'login',
                 views: {
