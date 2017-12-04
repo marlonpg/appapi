@@ -1,7 +1,2 @@
-TODO:
-Servico de Timeline  paginado
-
-
-
 Start mongodb
 mongod.exe --dbpath D:\mongo\data

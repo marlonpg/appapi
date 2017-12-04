@@ -2,27 +2,8 @@
 
 angular.module('doeApp')
         .controller('ContactController', ['$scope', function($scope) {
-/*
-            $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
+			/* NOT WORKING YET
 
-            var channels = [{value:"tel", label:"Tel."}, {value:"Email",label:"Email"}];
-
-            $scope.channels = channels;
-            $scope.invalidChannelSelection = false;
-			$scope.sendFeedback = function() {
-                console.log($scope.feedback);
-
-                if ($scope.feedback.agree && ($scope.feedback.mychannel === "")) {
-                    $scope.invalidChannelSelection = true;
-                    console.log('incorrect');
-                }
-                else {
-                    $scope.invalidChannelSelection = false;
-                    feedbackFactory.getFeedback().save($scope.feedback);
-                    $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
-                    $scope.feedbackForm.$setPristine();
-                    console.log($scope.feedback);
-                }
             };*/
         }])
 
@@ -53,6 +34,7 @@ angular.module('doeApp')
 							$scope.loginForm.$setPristine();
 							$scope.showLoading = false;
 							UserService.token = response.token;
+							UserService.name = response.name;
 							UserService.email = response.email;
 							//route back to home;
 							$scope.$state.go("app.timeline");
@@ -78,7 +60,8 @@ angular.module('doeApp')
                         //response.user;
 						$scope.user = {name:"", email:"", password:""};
 						$scope.signupForm.$setPristine();
-						$scope.showLoading = false;
+						$scope.messageClass = "alert alert-success alert-dismissable";
+						$scope.message = response.message;
                     },
                     function(response) {
                         $scope.message = "Error: "+response.status + " " + response.statusText;
@@ -87,34 +70,30 @@ angular.module('doeApp')
 
 			}
         }])
-		.controller('ProductRegisterController', ['$scope', 'UserService', function($scope, UserService) {
+		.controller('ProductRegisterController', ['$scope', '$http','UserService', function($scope, $http, UserService) {
             $scope.isUploading = false;
             $scope.message = "Loading ...";
 			$scope.saveProduct = function () {
-				createNewProduct(UserService.token);
+				createNewProduct(UserService.token)
+				.done(function(data) {
+					$scope.$state.go("app.timeline");
+					console.log('success', data) 
+				})
+				.fail(function(xhr) {
+					if(!xhr.responseJSON.loggedIn){
+						var response = confirm("You must be logged to do this operation!");
+						if (response == true) {
+							$scope.$state.go("app.login");
+						}
+					} else {
+						alert(xhr.responseJSON.message)
+					}
+					console.log('error', xhr);
+				});;
 			}
         }])
-		/* NOT WORKING YET
-		.controller('ProductRegisterController', ['$scope', 'productRegisterFactory', function($scope, productRegisterFactory) {
-            $scope.isUploading = false;
-            $scope.message = "Loading ...";
-			$scope.saveProduct = function () {
-				$scope.isUploading = true;
-				$scope.productRegisterFactory = new productRegisterFactory();
-				$scope.productRegisterFactory.data = new FormData($('#prodregister')[0]);
-				$scope.items = productRegisterFactory.save()
-					.$promise.then(
-						function(response) {
-							$scope.items = response;
-							$scope.isUploading = false;
-							alert("New product created with Success!");
-						},
-						function(response) {
-							$scope.isUploading = false;
-							$scope.message = "Error: "+response.status + " " + response.statusText;
-							alert("Error to connect to server, please try again later!");
-						}
-				);
-			}
-        }])*/
+		
+		.controller('MenuController', ['$scope', 'UserService', function($scope, UserService) {
+			$scope.name = UserService.name;
+        }])
 ;

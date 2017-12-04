@@ -19,7 +19,7 @@ if (typeof ip === "undefined") {
   ip = "127.0.0.1";
 }
 mongoose.connect(config.database);
-app.set('superSecret', config.secret);
+app.set('secret', config.secret);
 
 //ACCESS POST body information and URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -48,26 +48,13 @@ app.use(function(req, res, next) {
 
 app.get("/products", function(req, res) {
   console.log("Get all products");
-  var products = [
-    {
-      name: "Cadeira de ferro",
-      description: "Cadeira de ferro verde em bom estado, otima para o jardim",
-      imgurl: "/234567/cadeira-ferro.jpg"
-    },
-    {
-      name: "Maquina fotografica da Nikon",
-      description:
-        "Maquina usada poucas vezes vai com o cartao de memória da sandisk de 1.0gb\n O carregador  e o cabo para passar fotos para o computador \n E a capinha para guardar \nja vai carregada nao e a pilha \n esta funcionando perfeitamente Grava video tbm",
-      imgurl: "/123456/maquina.jpg"
-    },
-    {
-      name: "Cadeira de ferro",
-      description: "Cadeira de ferro verde em bom estado, otima para o jardim",
-      imgurl: "/345678/televisao.jpg"
-    }
-  ];
-
-  res.send(products);
+  
+	Product.find(function(err, products) {
+		if (err){
+			res.send(err);
+		}
+		res.json(products);
+	});
 });
 
 //TODO
@@ -104,13 +91,15 @@ routes.post('/authenticate', function(req, res) {
 				const payload = {
 					userEmail: user.email 
 				};
-				var token = jwt.sign(payload, app.get('superSecret'), {
-					expiresInMinutes: 5
+				var token = jwt.sign(payload, app.get('secret'), {
+					expiresInMinutes: 20
 				});
-				
+				console.log(user.name);
+				console.log(req.body);
 				res.json({
 					success: true,
 					email:req.body.email,
+					name:user.name,
 					message: 'authenticated!',
 					token: token
 				});
@@ -138,8 +127,7 @@ routes.post('/signup', function(req, res) {
 			console.log(err);
 			return;
 		}
-
-		res.json({ user: newUser });
+		res.json({ message: 'Your account has been created successfully!' });
 	});
 });
 
@@ -148,7 +136,7 @@ routes.post('/signup', function(req, res) {
 routes.use(function(req, res, next) {
 	var token = req.body.token || req.query.token || req.headers['x-access-token'];
 	if (token) {
-		jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+		jwt.verify(token, app.get('secret'), function(err, decoded) {      
 			if (err) {
 				return res.json({ success: false, message: 'Failed to authenticate token.' });    
 			} else {
@@ -159,6 +147,7 @@ routes.use(function(req, res, next) {
 	} else {
 		return res.status(403).send({ 
 			success: false, 
+			loggedIn: false,
 			message: 'Not Authorized!' 
 		});
 	}
@@ -167,24 +156,28 @@ routes.use(function(req, res, next) {
 //Create new product
 routes.post("/product", function(req, res) {
 	//console.log(req);
-	var productName = req.body.productName;
-	var productDescription = req.body.productDescription;
+	var name = req.body.productName;
+	var description = req.body.productDescription;
 	var category = req.body.category;
 	var expirationDate = req.body.expirationDate;
 	var fileName;
 	var filePath;
+	var fileUIPath;
 	console.log("Got a POST request to create a new product");
-	//console.log("@@@@@@@@@@@@@@@@@@@   FILE" +req.files);
+
 	if (!req.files.filetoupload) {
 		console.log("No files were uploaded.");
 	}
 	else {
-		fileName = req.files.filetoupload.name;
+		var timestamp = (new Date()).getTime();
+		fileName = timestamp +req.files.filetoupload.name;
 	
-		console.log('Uploading file ' +req.files.filetoupload.name + '...');
+		console.log('Uploading file ' + fileName + '...');
 
 		let filetoupload = req.files.filetoupload;
-		filePath = "public/app/images/uploads/" +req.files.filetoupload.name;
+
+		fileUIPath = "/uploads/" + fileName;
+		filePath = "public/app/images/uploads/" + fileName;
 		filetoupload.mv(filePath, function(err) {
 			if (err) return res.status(500).send(err);
 		});
@@ -192,12 +185,11 @@ routes.post("/product", function(req, res) {
 
 	var newProduct = new Product({ 
 		userEmail: 	req.decoded.userEmail,
-		productName: productName,
-		productDescription: productDescription,
+		name: name,
+		description: description,
 		category: category,
 		expirationDate: expirationDate,
-		fileName: fileName,
-		filePath: filePath 
+		filePath: fileUIPath 
 	});
 
 	newProduct.save(function(err){

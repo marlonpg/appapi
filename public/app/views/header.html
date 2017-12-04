@@ -1,6 +1,6 @@
 <header>
 <nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
-	<div class="container">
+	<div class="container" ng-controller="MenuController">
 		<a class="navbar-brand" ui-sref="app">#DOE</a>
 		<ul class="nav navbar-nav">
 			<li class="nav-item">
@@ -18,10 +18,10 @@
 
 		<div class="pull-xs-right" id="userLogin">
 			<a href="#" onclick="logoutUser()">
-			<span class="fa fa-sign-out" aria-hidden="true"></span>
+			<span class="fa fa-sign-out fa-3" aria-hidden="true"></span>
 			</a>
-			<img class="img-circle" src="images/saitama_profile.png">
-			<a >Marlon Gamba</a>
+			<img class="img-circle" src="images/photoTemplate.png">
+			<a >{{name}}</a>
 		</div>
 	</div>
 </nav>

@@ -1,7 +1,7 @@
 <div class="container" ng-controller="SignupController">
 	<form class="form-login" name="signupForm" novalidate>
         <h2>Register</h2>
-		<div class="text-center" ng-if="showLoading">
+		<div class="col-xs-12" ng-class="messageClass" ng-if="showLoading">
 			<h3>{{message}}</h3>
 		</div>
 		<!-- username -->

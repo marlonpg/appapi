@@ -5,6 +5,7 @@ angular.module('doeApp')
 	.factory('UserService', function() {
 	  return {
 		  token : '',
+		  name : '',
 		  email : ''
 	  };
 	})
@@ -37,12 +38,5 @@ angular.module('doeApp')
 			return config;
 		};
 	}])
-
-
-
-  //NOT WORKING YET
-/*  .factory('productRegisterFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-	return $resource(baseURL + "product");
-  }])*/
 ;
 
