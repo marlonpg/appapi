@@ -26,9 +26,9 @@ angular.module('doeApp')
             };*/
         }])
 
-		.controller('TimelineController', ['$scope', 'timelineFactory', function($scope, timelineFactory) {
+		.controller('TimelineController', ['$scope', 'timelineFactory', '$rootScope', function($scope, timelineFactory, $rootScope) {
             $scope.showTimeline = false;
-            $scope.message = "Loading ...";
+            $scope.message = "Loading ...";			
             $scope.items = timelineFactory.getTimelineProducts().query()
                 .$promise.then(
                     function(response) {
@@ -41,17 +41,25 @@ angular.module('doeApp')
             );
         }])
 		
-		.controller('LoginController', ['$scope', 'loginService', function($scope, loginService) {
-            $scope.showLogin = false;
+		.controller('LoginController', ['$scope', 'loginService', '$http', 'UserService', function($scope, loginService, $http, UserService) {
+            $scope.showLoading = false;
             $scope.message = "Loading ...";
 			$scope.login = function(){
 				$scope.showLoading = true;
-				loginService.login().get($scope.user).$promise.then(
+				loginService.login().save($scope.user).$promise.then(
                     function(response) {
-                        //response.user;
-						$scope.user = {email:"", password:""};
-						$scope.signupForm.$setPristine();
-						$scope.showLoading = false;
+						if(response.success){
+							$scope.user = {email:"", password:""};
+							$scope.loginForm.$setPristine();
+							$scope.showLoading = false;
+							UserService.token = response.token;
+							UserService.email = response.email;
+							//route back to home;
+							$scope.$state.go("app.timeline");
+						} else {
+							$scope.messageClass = "alert alert-danger";
+							$scope.message = "Error: "+response.message;
+						}
                     },
                     function(response) {
                         $scope.message = "Error: "+response.status + " " + response.statusText;
@@ -77,6 +85,13 @@ angular.module('doeApp')
                     }
             );
 
+			}
+        }])
+		.controller('ProductRegisterController', ['$scope', 'UserService', function($scope, UserService) {
+            $scope.isUploading = false;
+            $scope.message = "Loading ...";
+			$scope.saveProduct = function () {
+				createNewProduct(UserService.token);
 			}
         }])
 		/* NOT WORKING YET

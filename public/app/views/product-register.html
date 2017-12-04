@@ -1,4 +1,4 @@
-<div class="container"> 
+<div class="container" ng-controller="ProductRegisterController"> 
 	<div class="row">
 		<div class="col-xs-12">
 			<nav class="breadcrumb">
@@ -16,42 +16,42 @@
         <h2>Product Form</h2>
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="productName" placeholder="Enter product name">
+            <input type="text" class="form-control" name="productName" id="productName" placeholder="Enter product name">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" id="productDescription" placeholder="Enter product description">
+            <input type="text" class="form-control" name="productDescription" id="productDescription" placeholder="Enter product description">
         </div>
         <div class="form-group">
             <label>Category:</label>
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-primary">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> Clothes
+                <input type="radio" name="category" id="option1" autocomplete="off" checked> Clothes
                 </label>
                 <label class="btn btn-primary">
-                <input type="radio" name="options" id="option2" autocomplete="off"> Electronic
+                <input type="radio" name="category" id="option2" autocomplete="off"> Electronic
                 </label>
                 <label class="btn btn-primary">
-                <input type="radio" name="options" id="option3" autocomplete="off"> Food
+                <input type="radio" name="category" id="option3" autocomplete="off"> Food
                 </label>
                 <label class="btn btn-primary">
-                <input type="radio" name="options" id="option3" autocomplete="off"> Furniture
+                <input type="radio" name="category" id="option3" autocomplete="off"> Furniture
                 </label>
                 <label class="btn btn-primary">
-                <input type="radio" name="options" id="option3" autocomplete="off"> Toys
+                <input type="radio" name="category" id="option3" autocomplete="off"> Toys
                 </label>
             </div>
         </div>
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></div>
-                <input class="form-control col-md-4" id="adsDuration" type="date" placeholder="Fill with the date when it will be discarded">
+                <input class="form-control col-md-4" id="adsDuration" name="expirationDate" type="date" placeholder="Fill with the date when it will be discarded">
             </div>
         </div>
         <div class="form-group">
             <input class="form-control" type="file"  id="filetoupload" name="filetoupload"/>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-default" onclick="createNewProduct()">Submit</button>
+            <button type="button" class="btn btn-default" ng-click="saveProduct()">Submit</button>
         </div>
     </form>
 </div>

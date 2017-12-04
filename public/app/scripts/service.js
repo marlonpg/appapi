@@ -31,7 +31,7 @@ function populateTimeLine(data){
 
 function getSearchProducts() {
     console.log('getSearchProducts');
-    $.get( "http://localhost:8080/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
+    $.get( "http://localhost:8080/api/products", {filter: ($('#search').val() !== undefined ? $('#search').val() : '')} )
     .done(function(data) {
         console.log(data);
         populateSearchList(data);
@@ -58,11 +58,14 @@ function jsonToMediaObject(data){
     return items;
 }
 //ALTERNATIVE FILE UPLOADING
-function createNewProduct() {
+function createNewProduct(token) {
     console.log('createNewProduct');
     $.ajax({
-        url:'http://localhost:8080/product',
+        url:'http://localhost:8080/api/product',
         method: 'POST',
+		beforeSend: function(request) {
+			request.setRequestHeader("x-access-token", token);
+		},
         contentType: false,
         processData: false,
         data: new FormData($('#prodregister')[0]),

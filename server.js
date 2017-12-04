@@ -1,14 +1,13 @@
 var express = require("express");
 var app = express();
 var fileUpload = require("express-fileupload");
-
 var bodyParser  = require('body-parser');
 var morgan      = require('morgan');
 var mongoose    = require('mongoose');
 var jwt    = require('jsonwebtoken');
 var config = require('./config');
 var User   = require('./models/user');
-
+var Product   = require('./models/product');
 
 ///////////////////
 //CONFIGURATION
@@ -22,7 +21,7 @@ if (typeof ip === "undefined") {
 mongoose.connect(config.database);
 app.set('superSecret', config.secret);
 
-// use body parser so we can get info from POST and/or URL parameters
+//ACCESS POST body information and URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -32,23 +31,18 @@ app.use(fileUpload());
 //LOGS
 app.use(morgan('dev'));
 
+//Cross-Origin Resource Sharing (CORS) is a mechanism that uses additional HTTP headers to let a user agent gain permission to access selected resources from a server on a different origin (domain) than the site currently in use. 
 app.use(function(req, res, next) {
-  // Website you wish to allow to connect
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-  // Request methods you wish to allow
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
   );
-  // Request headers you wish to allow
   res.setHeader(
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type"
   );
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
   res.setHeader("Access-Control-Allow-Credentials", true);
-  // Pass to next layer of middleware
   next();
 });
 
@@ -76,119 +70,57 @@ app.get("/products", function(req, res) {
   res.send(products);
 });
 
-app.post("/product", function(req, res) {
-  console.log("Got a POST request to create a new product");
-  if (!req.files) 
-    return res.status(400).send("No files were uploaded.");
-  
-  console.log('Uploading file ' +req.files.filetoupload.name + '...');
-
-  let filetoupload = req.files.filetoupload;
-
-  filetoupload.mv("public/app/images/uploads/" + req.files.filetoupload.name, function(err) {
-    if (err) return res.status(500).send(err);
-    res.send("File uploaded!");
-  });
-});
-
+//TODO
 app.delete("/product", function(req, res) {
   console.log("Got a DELETE request to delete a product");
   res.send("Hello DELETE");
 });
-
+//TODO
 app.get("/product", function(req, res) {
   console.log("Got a GET request get product");
   res.send("Page GET");
 });
-
+//TODO
 app.get("/logout", function(req, res) {
   console.log("Logout");
   res.send("You have been logged out of the system!");
 });
 
-app.get('/setupAdmin', function(req, res) {
-	console.log("TEST setupAdmin ");
-	var admin = new User({ 
-		email: 'test@gmail.com', 
-		password: 'password',
-		admin: true 
-	});
-	
-	admin.save(function(err){
-      if(err){
-           console.log(err);
-           return;
-      }
-
-      res.json({ admin: admin });
-  });
-});
-
-app.get('/signup', function(req, res) {
-	console.log("TEST setupAdmin ");
-	var admin = new User({ 
-		email: 'test@gmail.com', 
-		password: 'password',
-		admin: true 
-	});
-	
-	admin.save(function(err){
-      if(err){
-           console.log(err);
-           return;
-      }
-
-      res.json({ admin: admin });
-  });
-});
-
-// API ROUTES -------------------
-// get an instance of the router for api routes
+///////////////////
+//API ROUTES
 var routes = express.Router(); 
 
-// route to authenticate a user (POST http://localhost:8080/api/authenticate)
+//AUTHENTICATE USER
 routes.post('/authenticate', function(req, res) {
-
-  // find the user
-  User.findOne({
-    email: req.body.email
-  }, function(err, user) {
-
-    if (err) throw err;
-
-    if (!user) {
-      res.json({ success: false, message: 'Authentication failed. User not found.' });
-    } else if (user) {
-
-      // check if password matches
-      if (user.password != req.body.password) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      } else {
-
-        // if user is found and password is right
-        // create a token with only our given payload
-    // we don't want to pass in the entire user since that has the password
-    const payload = {
-      admin: user.admin 
-    };
-        var token = jwt.sign(payload, app.get('superSecret'), {
-          expiresInMinutes: 1//60 // expires in 24 hours
-        });
-
-        // return the information including token as JSON
-        res.json({
-          success: true,
-          message: 'Enjoy your token!',
-          token: token
-        });
-      }   
-    }
-  });
+	User.findOne({email: req.body.email}, function(err, user) {
+		if (err) throw err;
+	
+		if (!user) {
+			res.json({ success: false, message: 'Invalid credentials!' });
+		} else if (user) {
+			if (user.password != req.body.password) {
+				res.json({ success: false, message: 'Wrong credentials!' });
+			} else {
+				const payload = {
+					userEmail: user.email 
+				};
+				var token = jwt.sign(payload, app.get('superSecret'), {
+					expiresInMinutes: 5
+				});
+				
+				res.json({
+					success: true,
+					email:req.body.email,
+					message: 'authenticated!',
+					token: token
+				});
+			}   
+		}
+	});
 });
 
+//USER REGISTER
 routes.post('/signup', function(req, res) {
-
-	setTimeout(timeoutTest, 10000);
 	var name = req.body.name;
 	var email = req.body.email;
 	var password = req.body.password;
@@ -200,62 +132,95 @@ routes.post('/signup', function(req, res) {
 		password: password,
 		admin: false 
 	});
-	function timeoutTest() {
-		console.log('Testing loading stuff');
-		newUser.save(function(err){
+
+	newUser.save(function(err){
 		if(err){
 			console.log(err);
 			return;
 		}
 
 		res.json({ user: newUser });
+	});
+});
+
+
+//ROUTE MIDDLEWARE - All below will have restricted access
+routes.use(function(req, res, next) {
+	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+	if (token) {
+		jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+			if (err) {
+				return res.json({ success: false, message: 'Failed to authenticate token.' });    
+			} else {
+				req.decoded = decoded;    
+				next();
+			}
+		});
+	} else {
+		return res.status(403).send({ 
+			success: false, 
+			message: 'Not Authorized!' 
+		});
+	}
+});
+
+//Create new product
+routes.post("/product", function(req, res) {
+	//console.log(req);
+	var productName = req.body.productName;
+	var productDescription = req.body.productDescription;
+	var category = req.body.category;
+	var expirationDate = req.body.expirationDate;
+	var fileName;
+	var filePath;
+	console.log("Got a POST request to create a new product");
+	//console.log("@@@@@@@@@@@@@@@@@@@   FILE" +req.files);
+	if (!req.files.filetoupload) {
+		console.log("No files were uploaded.");
+	}
+	else {
+		fileName = req.files.filetoupload.name;
+	
+		console.log('Uploading file ' +req.files.filetoupload.name + '...');
+
+		let filetoupload = req.files.filetoupload;
+		filePath = "public/app/images/uploads/" +req.files.filetoupload.name;
+		filetoupload.mv(filePath, function(err) {
+			if (err) return res.status(500).send(err);
 		});
 	}
 
+	var newProduct = new Product({ 
+		userEmail: 	req.decoded.userEmail,
+		productName: productName,
+		productDescription: productDescription,
+		category: category,
+		expirationDate: expirationDate,
+		fileName: fileName,
+		filePath: filePath 
+	});
+
+	newProduct.save(function(err){
+		if(err){
+			console.log(err);
+			return;
+		}
+
+		res.json({ user: newProduct });
+	});
 });
 
-
-// route middleware to verify a token
-routes.use(function(req, res, next) {
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  //decode
-  if (token) {
-
-    jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
-      if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });    
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
-        next();
-      }
-    });
-
-  } else {
-    return res.status(403).send({ 
-        success: false, 
-        message: 'Not Authorized!' 
-    });
-
-  }
-});
-
-// route to show a random message (GET http://localhost:8080/api/)
-routes.get('/', function(req, res) {
-  res.json({ message: 'Welcome to the coolest API on earth!' });
-});
-
-// route to return all users (GET http://localhost:8080/api/users)
+//ALL REGISTERED USERS
 routes.get('/users', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
 });   
 
-// apply the routes to our application with the prefix /api
+//APPLYING ROUTES
 app.use('/api', routes);
 
-
+//STATIC CONTENT
 app.use("/", express.static("public/"));
 
 app.listen(port, ip);
