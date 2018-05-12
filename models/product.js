@@ -6,6 +6,9 @@ module.exports = mongoose.model('Product', new Schema({
 	userEmail: String,
 	name: String,
 	description: String,
+	city: String,
+	state: String,
+	zipCode: String,
 	category: String,
 	expirationDate: String,
 	filePath: String

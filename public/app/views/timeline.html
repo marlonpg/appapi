@@ -1,8 +1,8 @@
 <div class="container" ng-controller="TimelineController">
 	<div class="jumbotron">
-			<h1>Newsfeed</h1>
-			<p>Here you can see the most recent ads.</p>
-			<video src="images/storyofstuff.mp4" controls autoplay></video>
+			<h1></h1>
+			<p>Últimos produtos adicionados.</p>
+			<video src="images/storyofstuff2.mp4" controls autoplay></video>
 	</div>
 	<div class="col-xs-12" ng-if="!showTimeline">
 		<h3>{{message}}</h3>
@@ -12,7 +12,7 @@
 			<li ng-repeat="item in items">
 				<div class="media">
 					<div class="media-left">
-						<a><div class="img media-object" style="background-image:url(\images{{item.filePath}}"></div></a>
+						<a><div class="img media-object" style="background-image:url(\images{{item.filePath | escape}}"></div></a>
 					</div>
 				<div class="media-body">
 					<h4 class="media-heading onhover">{{item.name}}</h4>{{item.description}}</div>

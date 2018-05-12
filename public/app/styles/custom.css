@@ -48,6 +48,12 @@ body {
 
 .result li {
     margin-top: 15px;
+    background-color: #eceeef;
+}
+
+.result li:hover {
+    margin-top: 15px;
+    background-color:lightgray;
 }
 
 

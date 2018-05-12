@@ -6,7 +6,9 @@ angular.module('doeApp')
 
             };*/
         }])
-
+		.filter('escape', function() {
+			return window.encodeURIComponent;
+		})
 		.controller('TimelineController', ['$scope', 'timelineFactory', '$rootScope', function($scope, timelineFactory, $rootScope) {
             $scope.showTimeline = false;
             $scope.message = "Loading ...";			

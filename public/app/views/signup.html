@@ -1,12 +1,12 @@
 <div class="container" ng-controller="SignupController">
 	<form class="form-login" name="signupForm" novalidate>
-        <h2>Register</h2>
+        <h2>Cadastro de Usuário</h2>
 		<div class="col-xs-12" ng-class="messageClass" ng-if="showLoading">
 			<h3>{{message}}</h3>
 		</div>
 		<!-- username -->
 		<div class="form-group"  ng-class="{ 'has-danger' : signupForm.name.$invalid && !signupForm.name.$pristine }">
-			<input type="text" class="form-control" id="name" name="name" placeholder="Name" ng-model="user.name" required autofocus>
+			<input type="text" class="form-control" id="name" name="name" placeholder="Nome Completo" ng-model="user.name" required autofocus>
 			<span ng-show="(signupForm.name.$invalid || signupForm.name.$error.required) && !signupForm.name.$pristine" class="form-text">Enter a valid name.</span>
 		</div>
 		<!-- email -->

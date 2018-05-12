@@ -170,6 +170,7 @@ routes.post("/product", function(req, res) {
 	}
 	else {
 		var timestamp = (new Date()).getTime();
+		
 		fileName = timestamp +req.files.filetoupload.name;
 	
 		console.log('Uploading file ' + fileName + '...');
@@ -187,6 +188,9 @@ routes.post("/product", function(req, res) {
 		userEmail: 	req.decoded.userEmail,
 		name: name,
 		description: description,
+		city: req.body.city,
+		state: req.body.state,
+		zipCode: req.body.zipCode,
 		category: category,
 		expirationDate: expirationDate,
 		filePath: fileUIPath 
