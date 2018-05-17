@@ -1,0 +1,26 @@
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<nav class="breadcrumb">
+				<a class="breadcrumb-item" href="#">Página Inicial</a>
+				<span class="breadcrumb-item active">Produtos</span>
+			</nav>
+		</div>
+		<div class="col-xs-12">
+		   <h3>Produtos</h3>
+		   <hr>
+		</div>
+	</div>
+	<div class="row row-content" ng-controller="ProductController">
+		<div class="media">
+			<div class="media-left">
+				<a><div class="img-product media-object" style="background-image:url(\images{{product.filePath | escape}}"></div></a>
+			</div>
+			<div class="media-body">
+				<h4 class="media-heading onhover">{{product.name}}</h4>
+				<p class="card-text">{{product.description}}</p>
+				<p class="card-text"><small class="text-muted">{{product.city}} {{product.state}} - {{product.zipCode}}</small></p>
+			</div>
+		</div>
+	</div>
+</div>

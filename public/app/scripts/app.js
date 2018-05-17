@@ -72,6 +72,13 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                         templateUrl : 'views/product-register.html',
                     }
                 }
+            }).state('app.product', {
+                url: 'product',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/product.html',
+                    }
+                }
             });
         $urlRouterProvider.otherwise('/');
     }).run(function ($rootScope, $state, $stateParams) {

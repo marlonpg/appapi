@@ -64,8 +64,18 @@ app.delete("/product", function(req, res) {
 });
 //TODO
 app.get("/product", function(req, res) {
-  console.log("Got a GET request get product");
-  res.send("Page GET");
+	console.log("Got a GET request get product");
+	var id = req.params.id;
+	var ObjectId = require('mongoose').Types.ObjectId; 
+	var query = { "_id" : new ObjectId("5afccd27b44e2928fcd47fb6")};
+
+	Product.find(query, function (err, product) {
+	    if (err){
+			return res.status(500).send(err);
+		}
+
+    	return res.status(200).send(product);	
+	});
 });
 //TODO
 app.get("/logout", function(req, res) {
@@ -151,6 +161,21 @@ routes.use(function(req, res, next) {
 			message: 'Not Authorized!' 
 		});
 	}
+});
+
+routes.get("/product/:id", function(req, res){
+	console.log("Got a GET request get product");
+	var id = req.params.id;
+	var ObjectId = require('mongoose').Types.ObjectId; 
+	var query = { "_id" : new ObjectId("5afccd27b44e2928fcd47fb6")};
+
+	Product.find(query, function (err, product) {
+	    if (err){
+			return res.status(500).send(err);
+		}
+
+    	return res.status(200).send(product);	
+	});
 });
 
 //Create new product

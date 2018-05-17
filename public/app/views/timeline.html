@@ -15,7 +15,7 @@
 						<a><div class="img media-object" style="background-image:url(\images{{item.filePath | escape}}"></div></a>
 					</div>
 				<div class="media-body">
-					<h4 class="media-heading onhover">{{item.name}}</h4>{{item.description}}</div>
+					<h4 class="media-heading onhover" ng-click="goToProduct(item._id)">{{item.name}}</h4>{{item.description}}</div>
 				</div>
 			</li>
 		</ul>

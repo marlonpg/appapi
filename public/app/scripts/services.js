@@ -38,5 +38,11 @@ angular.module('doeApp')
 			return config;
 		};
 	}])
+
+	.service('productService', ['$rootScope', 'baseURL', '$resource', function($rootScope, baseURL, $resource) {
+		this.getProduct = function(productId) {
+			return $resource(baseURL + "api/product/"+productId);
+		};
+	}])
 ;
 
