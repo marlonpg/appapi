@@ -25,7 +25,8 @@ body {
 .row-content {
   margin: 0px auto;
   border-bottom: 1px ridge;
-  min-height: 400px;
+  padding-bottom: 40px;
+  padding-top: 10px;
 }
 
 .row-footer {

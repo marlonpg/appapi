@@ -57,26 +57,33 @@ app.get("/products", function(req, res) {
 	});
 });
 
-//TODO
-app.delete("/product", function(req, res) {
-  console.log("Got a DELETE request to delete a product");
-  res.send("Hello DELETE");
-});
-//TODO
-app.get("/product", function(req, res) {
-	console.log("Got a GET request get product");
+app.get("/product/:id", function(req, res) {
+	console.log("getProductById: "+ req.params.id);
 	var id = req.params.id;
 	var ObjectId = require('mongoose').Types.ObjectId; 
-	var query = { "_id" : new ObjectId("5afccd27b44e2928fcd47fb6")};
+	var query = { "_id" : new ObjectId(id)};
 
 	Product.find(query, function (err, product) {
-	    if (err){
+		if (err){
 			return res.status(500).send(err);
 		}
-
-    	return res.status(200).send(product);	
+		return res.status(200).send(product);	
 	});
 });
+
+//TODO
+app.delete("/product/:id", function(req, res) {
+	console.log("Got a DELETE request to delete a product: "+ req.params.id);
+
+	Model.remove({ _id: req.params.id }, function(err) {
+		if(err){
+			console.log(err);
+			return;
+		}
+		res.json({ message: 'Product has been deleted successfully!' });
+	});
+});
+
 //TODO
 app.get("/logout", function(req, res) {
   console.log("Logout");
@@ -164,10 +171,10 @@ routes.use(function(req, res, next) {
 });
 
 routes.get("/product/:id", function(req, res){
-	console.log("Got a GET request get product");
+	console.log("Got a GET request get product: "+ req.params.id);
 	var id = req.params.id;
 	var ObjectId = require('mongoose').Types.ObjectId; 
-	var query = { "_id" : new ObjectId("5afccd27b44e2928fcd47fb6")};
+	var query = { "_id" : new ObjectId(id)};
 
 	Product.find(query, function (err, product) {
 	    if (err){

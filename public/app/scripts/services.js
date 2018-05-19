@@ -41,8 +41,13 @@ angular.module('doeApp')
 
 	.service('productService', ['$rootScope', 'baseURL', '$resource', function($rootScope, baseURL, $resource) {
 		this.getProduct = function(productId) {
-			return $resource(baseURL + "api/product/"+productId);
+			return $resource(baseURL + "product/"+productId);
+		};
+		
+		this.deleteProduct = function(productId) {
+			return $resource(baseURL + "product/"+productId);
 		};
 	}])
+	
 ;
 

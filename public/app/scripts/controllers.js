@@ -12,25 +12,55 @@ angular.module('doeApp')
 		.controller('TimelineController', ['$scope', 'timelineFactory', '$rootScope', '$location', function($scope, timelineFactory, $rootScope, $location) {
             $scope.showTimeline = false;
             $scope.message = "Loading ...";			
-            $scope.items = timelineFactory.getTimelineProducts().query()
+            $scope.products = timelineFactory.getTimelineProducts().query()
                 .$promise.then(
                     function(response) {
-                        $scope.items = response;
+                        $scope.products = response;
                         $scope.showTimeline = true;
                     },
                     function(response) {
                         $scope.message = "Error: "+response.status + " " + response.statusText;
                     }
 			);
-			
-			$scope.goToProduct = function(productId){
-				console.log("PRODUCTID: " + productId);
-				$scope.selectedProductId = productId;
-				$location.path("product");
-			}
-			
         }])
-		
+		.controller('ProductController', ['$scope', '$http','productService', '$stateParams', function($scope, $http, productService, $stateParams) {
+            $scope.showPage = false;
+			$scope.message = "Loading ...";
+			productService.getProduct($stateParams.id).query()
+				.$promise.then(
+					function(response) {
+						$scope.product = response[0];
+						$scope.showPage = true;
+					},
+					function(response) {
+						$scope.message = "Error: "+response.status + " " + response.statusText;
+					}
+			);
+			$scope.deleteProduct = function(productId){
+				productService.deleteProduct($stateParams.id).remove()
+					.$promise.then(
+						function(response) {
+							$scope.product = response[0];
+							$scope.showPage = true;
+						},
+						function(response) {
+							$scope.message = "Error: "+response.status + " " + response.statusText;
+						}
+				);
+			}
+			/*$scope.product = {
+				"userEmail": "admin@doe",
+				"name": "Botas de couro",
+				"description": "asdasdasdasd",
+				"city": "Osório",
+				"state": "RS",
+				"zipCode": "95520000",
+				"category": "on",
+				"expirationDate": "",
+				"filePath": "/uploads/1526517031719botasdecouro.jpg",
+				};*/
+
+        }])
 		.controller('LoginController', ['$scope', 'loginService', '$http', 'UserService', function($scope, loginService, $http, UserService) {
             $scope.showLoading = false;
             $scope.message = "Loading ...";
@@ -78,34 +108,6 @@ angular.module('doeApp')
             	);
 
 			}
-        }])
-		.controller('ProductController', ['$scope', '$http','productService', function($scope, $http, productService) {
-            $scope.showPage = false;
-			$scope.message = "Loading ...";
-			console.log($scope.selectedProductId);
-			productService.getProduct($scope.selectedProductId).query()
-				.$promise.then(
-					function(response) {
-						$scope.product = response;
-						$scope.showPage = true;
-					},
-					function(response) {
-						$scope.message = "Error: "+response.status + " " + response.statusText;
-					}
-			);
-
-			/*$scope.product = {
-				"userEmail": "admin@doe",
-				"name": "Botas de couro",
-				"description": "asdasdasdasd",
-				"city": "Osório",
-				"state": "RS",
-				"zipCode": "95520000",
-				"category": "on",
-				"expirationDate": "",
-				"filePath": "/uploads/1526517031719botasdecouro.jpg",
-				};*/
-
         }])
 		.controller('ProductRegisterController', ['$scope', '$http','UserService', function($scope, $http, UserService) {
             $scope.message = "Loading ...";

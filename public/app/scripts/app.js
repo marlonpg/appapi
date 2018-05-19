@@ -73,7 +73,10 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                     }
                 }
             }).state('app.product', {
-                url: 'product',
+                url: 'product/{id}',
+                controller: function($stateParams){
+                    $stateParams.id
+                },
                 views: {
                     'content@': {
                         templateUrl : 'views/product.html',
