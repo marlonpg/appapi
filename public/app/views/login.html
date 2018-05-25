@@ -11,10 +11,10 @@
 		</div>
 		<!-- password -->
         <div class="form-group" ng-class="{ 'has-danger' : loginForm.password.$invalid && !loginForm.password.$pristine }">
-            <input type="password" name="password" class="form-control" ng-model="user.password" placeholder="Password" required>
+            <input type="password" name="password" class="form-control" ng-model="user.password" placeholder="Senha" required>
 			<p ng-show="(loginForm.password.$invalid || loginForm.password.$error.required) && !loginForm.email.$pristine" class="form-text">Enter your password.</p>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="login()" ng-disabled="loginForm.$invalid">Sign in</button>
-        <span>Don't have an account? </span> <a class="form-login-link" ui-sref="app.signup">Sign up</a>
+        <button class="btn btn-lg btn-primary btn-block" type="button" ng-click="login()" ng-disabled="loginForm.$invalid">Entrar</button>
+        <span>Não tem cadastro? Cadastre-se </span> <a class="form-login-link" ui-sref="app.signup">aqui!</a>
     </form>
 </div>
