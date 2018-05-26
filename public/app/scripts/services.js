@@ -9,6 +9,7 @@ angular.module('doeApp')
 		  email : ''
 	  };
 	})
+	
 	.factory('timelineFactory', ['$resource', 'baseURL', function($resource, baseURL) {
 		var timelineFactory = {};
 
@@ -41,11 +42,14 @@ angular.module('doeApp')
 
 	.service('productService', ['$rootScope', 'baseURL', '$resource', function($rootScope, baseURL, $resource) {
 		this.getProduct = function(productId) {
-			return $resource(baseURL + "product/"+productId);
+			return $resource(baseURL + "api/product/"+productId);
 		};
-		
+		this.getUserFromProduct = function(productId) {
+			console.log("getUserFromProduct");
+			return $resource(baseURL + "api/user-from-product/"+productId);
+		};
 		this.deleteProduct = function(productId) {
-			return $resource(baseURL + "product/"+productId);
+			return $resource(baseURL + "api/product/"+productId);
 		};
 	}])
 	

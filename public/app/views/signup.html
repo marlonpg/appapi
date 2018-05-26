@@ -9,6 +9,11 @@
 			<input type="text" class="form-control" id="name" name="name" placeholder="Seu nome" ng-model="user.name" required autofocus>
 			<span ng-show="(signupForm.name.$invalid || signupForm.name.$error.required) && !signupForm.name.$pristine" class="form-text">Enter a valid name.</span>
 		</div>
+		<!-- cellphone -->
+		<div class="form-group"  ng-class="{ 'has-danger' : signupForm.cellphone.$invalid && !signupForm.cellphone.$pristine }">
+			<input type="text" class="form-control" id="cellphone" name="cellphone" placeholder="Seu telefone" ng-model="user.cellphone" required autofocus>
+			<span ng-show="(signupForm.name.$invalid || signupForm.cellphone.$error.required) && !signupForm.cellphone.$pristine" class="form-text">Enter a valid cellphone.</span>
+		</div>
 		<!-- email -->
 		<div class="form-group"  ng-class="{ 'has-danger' : signupForm.email.$invalid && !signupForm.email.$pristine }">
 			<input type="email" class="form-control" id="email" name="email" placeholder="Seu e-mail" ng-model="user.email" required>

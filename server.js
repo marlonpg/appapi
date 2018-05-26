@@ -57,8 +57,19 @@ app.get("/products", function(req, res) {
 	});
 });
 
-app.get("/product/:id", function(req, res) {
-	console.log("getProductById: "+ req.params.id);
+//TODO
+app.get("/logout", function(req, res) {
+  console.log("Logout");
+  res.send("You have been logged out of the system!");
+});
+
+///////////////////
+//API ROUTES
+var routes = express.Router(); 
+
+//getProduct
+routes.get("/product/:id", function(req, res){
+	console.log("getProduct: "+ req.params.id);
 	var id = req.params.id;
 	var ObjectId = require('mongoose').Types.ObjectId; 
 	var query = { "_id" : new ObjectId(id)};
@@ -71,28 +82,27 @@ app.get("/product/:id", function(req, res) {
 	});
 });
 
-//TODO
-app.delete("/product/:id", function(req, res) {
-	console.log("Got a DELETE request to delete a product: "+ req.params.id);
+//getUserFromProduct
+routes.get("/user-from-product/:id", function(req, res){
+	console.log("getUserFromProduct: "+ req.params.id);
+	var id = req.params.id;
+	var ObjectId = require('mongoose').Types.ObjectId; 
+	var query = { "_id" : new ObjectId(id)};
 
-	Model.remove({ _id: req.params.id }, function(err) {
-		if(err){
-			console.log(err);
-			return;
+	Product.findOne(query, function (err, product) {
+		if (err){
+			return res.status(500).send(err);
 		}
-		res.json({ message: 'Product has been deleted successfully!' });
+		console.log(product.userEmail);	
+
+		User.findOne({email: product.userEmail}, function(err, user) {
+			if (user) {
+				console.log({'userEmail':product.userEmail, 'userName': user.name, 'userCellphone': user.cellphone });
+				return res.status(200).send({userEmail:product.userEmail, userName: user.name, userCellphone: user.cellphone });
+			}
+		});
 	});
 });
-
-//TODO
-app.get("/logout", function(req, res) {
-  console.log("Logout");
-  res.send("You have been logged out of the system!");
-});
-
-///////////////////
-//API ROUTES
-var routes = express.Router(); 
 
 //AUTHENTICATE USER
 routes.post('/authenticate', function(req, res) {
@@ -111,12 +121,11 @@ routes.post('/authenticate', function(req, res) {
 				var token = jwt.sign(payload, app.get('secret'), {
 					expiresInMinutes: 20
 				});
-				console.log(user.name);
-				console.log(req.body);
 				res.json({
 					success: true,
 					email:req.body.email,
 					name:user.name,
+					cellphone:user.cellphone,
 					message: 'authenticated!',
 					token: token
 				});
@@ -128,12 +137,14 @@ routes.post('/authenticate', function(req, res) {
 //USER REGISTER
 routes.post('/signup', function(req, res) {
 	var name = req.body.name;
+	var cellphone = req.body.cellphone;
 	var email = req.body.email;
 	var password = req.body.password;
 	
-	console.log("Creating new User - NAME: %s - EMAIL: %s - PASSWORD: %s", name, email, password);
+	console.log("Creating new User - NAME: %s - CELLPHONE: %s - EMAIL: %s - PASSWORD: %s", name, cellphone, email, password);
 	var newUser = new User({ 
 		name: name,
+		cellphone: cellphone,
 		email: email, 
 		password: password,
 		admin: false 
@@ -142,12 +153,12 @@ routes.post('/signup', function(req, res) {
 	newUser.save(function(err){
 		if(err){
 			console.log(err);
-			return;
+			res.json({ success: false, message: 'Invalid information!' });
+		} else {
+			res.json({ message: 'Your account has been created successfully!' });
 		}
-		res.json({ message: 'Your account has been created successfully!' });
 	});
 });
-
 
 //ROUTE MIDDLEWARE - All below will have restricted access
 routes.use(function(req, res, next) {
@@ -170,22 +181,7 @@ routes.use(function(req, res, next) {
 	}
 });
 
-routes.get("/product/:id", function(req, res){
-	console.log("Got a GET request get product: "+ req.params.id);
-	var id = req.params.id;
-	var ObjectId = require('mongoose').Types.ObjectId; 
-	var query = { "_id" : new ObjectId(id)};
-
-	Product.find(query, function (err, product) {
-	    if (err){
-			return res.status(500).send(err);
-		}
-
-    	return res.status(200).send(product);	
-	});
-});
-
-//Create new product
+//createProduct
 routes.post("/product", function(req, res) {
 	//console.log(req);
 	var name = req.body.productName;
@@ -234,7 +230,35 @@ routes.post("/product", function(req, res) {
 			return;
 		}
 
-		res.json({ user: newProduct });
+		res.json({ product: newProduct });
+	});
+});
+
+//deleteProduct
+routes.delete("/product/:id", function(req, res) {
+	console.log("Got a DELETE request to delete a product: "+ req.params.id);
+
+	Product.remove({ _id: req.params.id }, function(err) {
+		if(err){
+			console.log(err);
+			return;
+		}
+		res.json({ message: 'Product has been deleted successfully!' });
+	});
+});
+
+//getProductWithoutContact
+app.get("/product/:id", function(req, res) {
+	console.log("getProductById: "+ req.params.id);
+	var id = req.params.id;
+	var ObjectId = require('mongoose').Types.ObjectId; 
+	var query = { "_id" : new ObjectId(id)};
+
+	Product.find(query, function (err, product) {
+		if (err){
+			return res.status(500).send(err);
+		}
+		return res.status(200).send({'product': product});	
 	});
 });
 

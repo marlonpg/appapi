@@ -29,6 +29,7 @@ angular.module('doeApp')
 			productService.getProduct($stateParams.id).query()
 				.$promise.then(
 					function(response) {
+						console.log("Response -getProduct "+ response);
 						$scope.product = response[0];
 						$scope.showPage = true;
 					},
@@ -36,7 +37,18 @@ angular.module('doeApp')
 						$scope.message = "Error: "+response.status + " " + response.statusText;
 					}
 			);
-			$scope.deleteProduct = function(productId){
+			productService.getUserFromProduct($stateParams.id).get()
+				.$promise.then(
+					function(response) {
+						console.log("Response - getUserFromProduct "+ response);
+						$scope.userContact = response;
+						$scope.showPage = true;
+					},
+					function(response) {
+						$scope.message = "Error: "+response.status + " " + response.statusText;
+					}
+			);
+			$scope.deleteProduct = function(){
 				productService.deleteProduct($stateParams.id).remove()
 					.$promise.then(
 						function(response) {
@@ -97,7 +109,7 @@ angular.module('doeApp')
 				signupService.signup().save($scope.user).$promise.then(
                     function(response) {
                         //response.user;
-						$scope.user = {name:"", email:"", password:""};
+						$scope.user = {name:"", cellphone:"", email:"", password:""};
 						$scope.signupForm.$setPristine();
 						$scope.messageClass = "alert alert-success alert-dismissable";
 						$scope.message = response.message;
