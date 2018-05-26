@@ -52,7 +52,7 @@ angular.module('doeApp')
 				productService.deleteProduct($stateParams.id).remove()
 					.$promise.then(
 						function(response) {
-							$scope.product = response[0];
+							$scope.$state.go("app.timeline");
 							$scope.showPage = true;
 						},
 						function(response) {

@@ -168,6 +168,7 @@ routes.use(function(req, res, next) {
 			if (err) {
 				return res.json({ success: false, message: 'Failed to authenticate token.' });    
 			} else {
+				console.log("@@@DECODED" + JSON.stringify(decoded));
 				req.decoded = decoded;    
 				next();
 			}
@@ -180,6 +181,44 @@ routes.use(function(req, res, next) {
 		});
 	}
 });
+
+function getUserEmailFromSession(request) {
+	var token = request.body.token || request.query.token || request.headers['x-access-token'];
+	return new Promise(function(resolve, reject) {
+		if (token) {
+			jwt.verify(token, app.get('secret'), function(err, decoded) {      
+				if (err) {
+					console.log("getUserEmailFromSession - Failed to authenticate token."); 
+					reject(err);
+				} else {
+					var user = JSON.parse(JSON.stringify(decoded));
+					console.log("getUserEmailFromSession " + JSON.stringify(user.userEmail));
+					resolve(user.userEmail);
+				}
+			});
+		}
+	})
+}
+
+function hasPermission(productId, userEmail) {
+	console.log("hasPermission: "+ productId + ' '+userEmail);
+	return new Promise(function(resolve, reject) {
+		var ObjectId = require('mongoose').Types.ObjectId; 
+		var query = { "_id" : new ObjectId(productId)};
+	
+		Product.find(query, function (err, product) {
+			if (err){
+				resolve('false');
+			}
+			resolve(product);
+			/*if(product.userEmail === userEmail){
+				resolve(true);
+			} else {
+				resolve(false);
+			}*/
+		});
+	})
+}
 
 //createProduct
 routes.post("/product", function(req, res) {
@@ -236,15 +275,38 @@ routes.post("/product", function(req, res) {
 
 //deleteProduct
 routes.delete("/product/:id", function(req, res) {
-	console.log("Got a DELETE request to delete a product: "+ req.params.id);
-
-	Product.remove({ _id: req.params.id }, function(err) {
-		if(err){
+	var productId = req.params.id;
+	console.log("deleteProduct "+ productId);
+	getUserEmailFromSession(req).then(
+		function(userEmail) {
+			hasPermission(productId, userEmail).then(
+				function(response){
+					var user = JSON.parse(JSON.stringify(response[0]));
+					if(user.userEmail == userEmail){
+						console.log("Response -getProduct "+ user);
+						Product.remove({ _id: productId }, function(err) {
+							if(err){
+								console.log(err);
+								return;
+							}
+							res.json({ success: true, message: 'Product has been deleted successfully!' });
+						});
+					} else {
+						res.json({ success: false, message: 'You are not allowed to delete this product!' });
+					}
+					
+				},
+				function(err) {
+					console.log("ERROR hasPermissions ",err);
+					return;
+				}
+			);
+		},
+		function(err) {
 			console.log(err);
 			return;
 		}
-		res.json({ message: 'Product has been deleted successfully!' });
-	});
+	);
 });
 
 //getProductWithoutContact
