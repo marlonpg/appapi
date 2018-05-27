@@ -1,8 +1,13 @@
 <div class="container" ng-controller="TimelineController">
-	<div class="jumbotron">
-			<h1></h1>
-			<p>Últimos produtos adicionados.</p>
-			<video src="images/storyofstuff2.mp4" controls autoplay></video>
+	<div class="jumbotron jumbotronCustom">
+		<div class="col-lg-6 col-xs-12 search-input">
+			<div class="input-group">
+					<input type="text" ng-model="searchProductName" class="form-control" press-enter="search()" placeholder="O que você está procurando?">
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-click="search()" press-enter="search()" type="button"><span class="fa fa-search"></span></button>
+					</span>
+			</div>
+		</div>
 	</div>
 	<div class="col-xs-12" ng-if="!showTimeline">
 		<h3>{{message}}</h3>

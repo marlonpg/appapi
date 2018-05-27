@@ -6,6 +6,7 @@ angular.module('doeApp')
 	  return {
 		  token : '',
 		  name : '',
+		  isAdmin : '',
 		  email : ''
 	  };
 	})
@@ -50,6 +51,9 @@ angular.module('doeApp')
 		};
 		this.deleteProduct = function(productId) {
 			return $resource(baseURL + "api/product/"+productId);
+		};
+		this.searchProducts = function(name) {
+			return $resource(baseURL + "api/products?name="+name);
 		};
 	}])
 	

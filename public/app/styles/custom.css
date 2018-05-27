@@ -94,3 +94,11 @@ body {
 	background-color: orangered;
 	color:white;
 }
+.jumbotronCustom {
+    background-image: url("../images/banner-doe.jpg");
+    background-size: cover;
+    height: 235px;
+}
+.search-input {
+    padding-top: 100px;
+}

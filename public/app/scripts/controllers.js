@@ -9,7 +9,7 @@ angular.module('doeApp')
 		.filter('escape', function() {
 			return window.encodeURIComponent;
 		})
-		.controller('TimelineController', ['$scope', 'timelineFactory', '$rootScope', '$location', function($scope, timelineFactory, $rootScope, $location) {
+		.controller('TimelineController', ['$scope', 'timelineFactory', function($scope, timelineFactory) {
             $scope.showTimeline = false;
             $scope.message = "Loading ...";			
             $scope.products = timelineFactory.getTimelineProducts().query()
@@ -22,8 +22,11 @@ angular.module('doeApp')
                         $scope.message = "Error: "+response.status + " " + response.statusText;
                     }
 			);
+			$scope.search = function () {
+				$scope.$state.go("app.search", {productName: $scope.searchProductName});
+			}
         }])
-		.controller('ProductController', ['$scope', '$http','productService', '$stateParams', 'UserService', function($scope, $http, productService, $stateParams, UserService) {
+		.controller('ProductController', ['$scope', 'productService', '$stateParams', 'UserService', function($scope, productService, $stateParams, UserService) {
 			$scope.showWish = false;
 			$scope.showDelete = false;
 			productService.getProduct($stateParams.id).query()
@@ -64,20 +67,19 @@ angular.module('doeApp')
 				}
 			}
 			$scope.changeButtonsVisibility = function(){
-				console.log(UserService.email);
-				console.log($scope.userContact.userEmail);
-				if(UserService && UserService.email && UserService.email == $scope.userContact.userEmail){
+				if(UserService.isAdmin || UserService.email && UserService.email == $scope.userContact.userEmail){
 					$scope.showWish = false;
 					$scope.showDelete = true;
 				} else if(UserService && UserService.email && UserService.email !== $scope.userContact.userEmail){
-					console.log($scope.userContact.userEmail);
-					console.log($scope.userContact);
 					$scope.showWish = true;
+					$scope.showDelete = false;
+				} else {
+					$scope.showWish = false;
 					$scope.showDelete = false;
 				}
 			}
         }])
-		.controller('LoginController', ['$scope', 'loginService', '$http', 'UserService', function($scope, loginService, $http, UserService) {
+		.controller('LoginController', ['$scope', 'loginService', 'UserService', function($scope, loginService, UserService) {
             $scope.showLoading = false;
             $scope.message = "Loading ...";
 			$scope.login = function(){
@@ -91,6 +93,7 @@ angular.module('doeApp')
 							UserService.token = response.token;
 							UserService.name = response.name;
 							UserService.email = response.email;
+							UserService.isAdmin = response.isAdmin;
 							//route back to home;
 							$scope.$state.go("app.timeline");
 						} else {
@@ -125,7 +128,7 @@ angular.module('doeApp')
 
 			}
         }])
-		.controller('ProductRegisterController', ['$scope', '$http','UserService', function($scope, $http, UserService) {
+		.controller('ProductRegisterController', ['$scope', 'UserService', function($scope, UserService) {
             $scope.message = "Loading ...";
 			$scope.saveProduct = function () {
 				createNewProduct(UserService.token)
@@ -148,5 +151,43 @@ angular.module('doeApp')
         }])		
 		.controller('MenuController', ['$scope', 'UserService', function($scope, UserService) {
 			$scope.name = UserService.name;
-        }])
+		}])
+		.controller('SearchController', ['$scope', 'productService','$stateParams', function($scope, productService, $stateParams) {		
+			$scope.productName;
+			$scope.search = function () {
+				if($scope.searchProductName == undefined || $scope.searchProductName === ''){
+					$scope.productName = $stateParams.productName;
+				} else {
+					$scope.productName = $scope.searchProductName;
+				}
+				
+				productService.searchProducts($scope.productName).query()
+                .$promise.then(
+                    function(response) {
+                        $scope.products = response;
+						$scope.showTimeline = true;
+						$scope.searchProductName = '';
+                    },
+                    function(response) {
+                        $scope.message = "Error: "+response.status + " " + response.statusText;
+                    }
+				);
+			}
+			if($stateParams.productName){
+				$scope.search();
+			}
+		}])
+		.directive('pressEnter', function () {
+			return function (scope, element, attrs) {
+				element.bind("keydown keypress", function (event) {
+					if(event.which === 13) {
+						scope.$apply(function (){
+							scope.$eval(attrs.pressEnter);
+						});
+		
+						event.preventDefault();
+					}
+				});
+			};
+		});
 ;

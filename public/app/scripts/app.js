@@ -94,6 +94,18 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                         templateUrl : 'views/product.html',
                     }
                 }
+            })
+            .state('app.search', {
+                url: 'search/{productName}',
+                controller: function($stateParams){
+                    $stateParams.productName
+                },
+                views: {
+                    'content@': {
+                        templateUrl : 'views/search.html',
+                        controller  : 'SearchController'
+                    }
+                }
             });
         $urlRouterProvider.otherwise('/');
     }).run(function ($rootScope, $state, $stateParams) {

@@ -67,12 +67,10 @@ app.get("/logout", function(req, res) {
 //API ROUTES
 var routes = express.Router(); 
 
-//getProduct
 routes.get("/product/:id", function(req, res){
 	console.log("getProduct: "+ req.params.id);
-	var id = req.params.id;
 	var ObjectId = require('mongoose').Types.ObjectId; 
-	var query = { "_id" : new ObjectId(id)};
+	var query = { "_id" : new ObjectId(req.params.id)};
 
 	Product.find(query, function (err, product) {
 		if (err){
@@ -82,25 +80,34 @@ routes.get("/product/:id", function(req, res){
 	});
 });
 
-//getUserFromProduct
 routes.get("/user-from-product/:id", function(req, res){
 	console.log("getUserFromProduct: "+ req.params.id);
-	var id = req.params.id;
 	var ObjectId = require('mongoose').Types.ObjectId; 
-	var query = { "_id" : new ObjectId(id)};
+	var query = { "_id" : new ObjectId(req.params.id)};
 
 	Product.findOne(query, function (err, product) {
 		if (err){
 			return res.status(500).send(err);
 		}
-		console.log(product.userEmail);	
-
 		User.findOne({email: product.userEmail}, function(err, user) {
 			if (user) {
-				console.log({'userEmail':product.userEmail, 'userName': user.name, 'userCellphone': user.cellphone });
 				return res.status(200).send({userEmail:product.userEmail, userName: user.name, userCellphone: user.cellphone });
 			}
 		});
+	});
+});
+
+routes.get("/products", function(req, res){
+	console.log("searchProducts: "+ req.query.name);
+	var ObjectId = require('mongoose').Types.ObjectId; 
+	//var query = { "name" : /.* req.query.name .*/i};
+	var query = {"name" :{  $regex: new RegExp("^" + req.query.name, "i") }};
+	console.log("searchProducts: query:"+ JSON.stringify(query));
+	Product.find(query, function (err, products) {
+		if (err){
+			return res.status(500).send(err);
+		}
+		return res.status(200).send(products);	
 	});
 });
 
@@ -116,7 +123,8 @@ routes.post('/authenticate', function(req, res) {
 				res.json({ success: false, message: 'Wrong credentials!' });
 			} else {
 				const payload = {
-					userEmail: user.email 
+					userEmail: user.email,
+					isAdmin: user.admin 
 				};
 				var token = jwt.sign(payload, app.get('secret'), {
 					expiresInMinutes: 20
@@ -125,6 +133,7 @@ routes.post('/authenticate', function(req, res) {
 					success: true,
 					email:req.body.email,
 					name:user.name,
+					isAdmin:user.admin,
 					cellphone:user.cellphone,
 					message: 'authenticated!',
 					token: token
@@ -193,7 +202,7 @@ function getUserEmailFromSession(request) {
 				} else {
 					var user = JSON.parse(JSON.stringify(decoded));
 					console.log("getUserEmailFromSession " + JSON.stringify(user.userEmail));
-					resolve(user.userEmail);
+					resolve({'userEmail' :user.userEmail, 'isAdmin': user.isAdmin});
 				}
 			});
 		}
@@ -278,11 +287,11 @@ routes.delete("/product/:id", function(req, res) {
 	var productId = req.params.id;
 	console.log("deleteProduct "+ productId);
 	getUserEmailFromSession(req).then(
-		function(userEmail) {
-			hasPermission(productId, userEmail).then(
+		function(userSession) {
+			hasPermission(productId, userSession.userEmail).then(
 				function(response){
 					var user = JSON.parse(JSON.stringify(response[0]));
-					if(user.userEmail == userEmail){
+					if(userSession.isAdmin || user.userEmail == userSession.userEmail){
 						console.log("Response -getProduct "+ user);
 						Product.remove({ _id: productId }, function(err) {
 							if(err){
