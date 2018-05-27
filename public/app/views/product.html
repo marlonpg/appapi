@@ -11,19 +11,19 @@
 			   <hr>
 			</div>
 		</div>
-		<div class="row row-content" ng-controller="ProductController">
+		<div ng-controller="ProductController">
 			<div class="row row-content">
 				<div class="col-6 col-xs-9 col-sm-6">
 					<h3 class="media-heading">{{product.name}}</h3>
 					<a><div class="img-product media-object" style="background-image:url(\images{{product.filePath | escape}}"></div></a>
-					<button type="button" class="btn btn-success btn-sm">
-						<span class="glyphicon glyphicon-remove"></span> Eu quero! 
+					<button type="button" class="btn btn-success btn-sm" ng-show="showWish">
+						Eu quero! 
 					</button>
-					<button type="button" class="btn btn-danger btn-sm" ng-click="deleteProduct()">
-						<span class="glyphicon glyphicon-remove"></span> Deletar
+					<button type="button" class="btn btn-danger btn-sm" ng-show="showDelete" ng-click="deleteProduct()">
+						Deletar
 					</button>
 					<button type="button" class="btn btn-warning btn-sm">
-						<span class="glyphicon glyphicon-remove"></span> Interessados <span class="badge">1</span>
+						Interessados <span class="badge">1</span>
 					</button>
 				</div>
 			</div>
@@ -31,7 +31,7 @@
 				<div class="col-9 col-xs-9 col-sm-9">
 					<div class="media-body">
 						<h4 class="media-heading">Descrição</h4>
-						<p class="card-text">{{product.description}}</p>
+						<p class="col-9 col-xs-9 col-sm-9 card-text">{{product.description}}</p>
 					</div>
 				</div>
 			</div>
@@ -39,11 +39,9 @@
 				<div class="col-6 col-xs-9 col-sm-6">
 					<div class="media-body">
 						<h4 class="media-heading">Localização</h4>
-						<div class="row">
-							<div class="col-9 col-xs-9 col-sm-9">Cidade: {{product.city}}</div>
-							<div class="col-9 col-xs-9 col-sm-9">Estado: {{product.state}}</div>
-							<div class="col-9 col-xs-9 col-sm-9">CEP: {{product.zipCode}}</div>
-						</div>
+						<div class="col-9 col-xs-9 col-sm-9">Cidade: {{product.city}}</div>
+						<div class="col-9 col-xs-9 col-sm-9">Estado: {{product.state}}</div>
+						<div class="col-9 col-xs-9 col-sm-9">CEP: {{product.zipCode}}</div>
 					</div>
 				</div>
 				<div class="col-6 col-xs-6 col-sm-6">
@@ -51,7 +49,7 @@
 						<h4 class="media-heading">Contato</h4>
 						<div class="col-9 col-xs-9 col-sm-9">Nome: {{userContact.userName}}</div>
 						<div class="col-9 col-xs-9 col-sm-9">Telefone: {{userContact.userCellphone}}</div>
-						<div class="col-9 col-xs-9 col-sm-9">Redes Sociais: {{userContact.userEmail}}</div>
+						<div class="col-9 col-xs-9 col-sm-9">Contato: {{userContact.userEmail}}</div>
 					</div>
 				</div>
 			</div>

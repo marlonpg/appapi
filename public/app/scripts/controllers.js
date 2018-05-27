@@ -23,15 +23,13 @@ angular.module('doeApp')
                     }
 			);
         }])
-		.controller('ProductController', ['$scope', '$http','productService', '$stateParams', function($scope, $http, productService, $stateParams) {
-            $scope.showPage = false;
-			$scope.message = "Loading ...";
+		.controller('ProductController', ['$scope', '$http','productService', '$stateParams', 'UserService', function($scope, $http, productService, $stateParams, UserService) {
+			$scope.showWish = false;
+			$scope.showDelete = false;
 			productService.getProduct($stateParams.id).query()
 				.$promise.then(
 					function(response) {
-						console.log("Response -getProduct "+ response);
 						$scope.product = response[0];
-						$scope.showPage = true;
 					},
 					function(response) {
 						$scope.message = "Error: "+response.status + " " + response.statusText;
@@ -40,38 +38,44 @@ angular.module('doeApp')
 			productService.getUserFromProduct($stateParams.id).get()
 				.$promise.then(
 					function(response) {
-						console.log("Response - getUserFromProduct "+ response);
 						$scope.userContact = response;
-						$scope.showPage = true;
+						$scope.changeButtonsVisibility();
 					},
 					function(response) {
 						$scope.message = "Error: "+response.status + " " + response.statusText;
 					}
 			);
-			$scope.deleteProduct = function(){
-				productService.deleteProduct($stateParams.id).remove()
-					.$promise.then(
-						function(response) {
-							$scope.$state.go("app.timeline");
-							$scope.showPage = true;
-						},
-						function(response) {
-							$scope.message = "Error: "+response.status + " " + response.statusText;
-						}
-				);
-			}
-			/*$scope.product = {
-				"userEmail": "admin@doe",
-				"name": "Botas de couro",
-				"description": "asdasdasdasd",
-				"city": "Osório",
-				"state": "RS",
-				"zipCode": "95520000",
-				"category": "on",
-				"expirationDate": "",
-				"filePath": "/uploads/1526517031719botasdecouro.jpg",
-				};*/
 
+			$scope.deleteProduct = function(){
+				var deleteProduct = window.confirm('Você quer mesmo deletar o Produto "'+ $scope.product.name + '"?');
+				if(deleteProduct){
+					productService.deleteProduct($stateParams.id).remove()
+						.$promise.then(
+							function(response) {
+								console.log(response);
+								$scope.$state.go("app.timeline");
+							},
+							function(response) {
+								alert("Você não tem permissão para deletar este produto.");
+								console.log("Error deleteProduct: "+response.status + " " + response.statusText);
+								$scope.message = "Error: "+response.status + " " + response.statusText;
+							}
+						);
+				}
+			}
+			$scope.changeButtonsVisibility = function(){
+				console.log(UserService.email);
+				console.log($scope.userContact.userEmail);
+				if(UserService && UserService.email && UserService.email == $scope.userContact.userEmail){
+					$scope.showWish = false;
+					$scope.showDelete = true;
+				} else if(UserService && UserService.email && UserService.email !== $scope.userContact.userEmail){
+					console.log($scope.userContact.userEmail);
+					console.log($scope.userContact);
+					$scope.showWish = true;
+					$scope.showDelete = false;
+				}
+			}
         }])
 		.controller('LoginController', ['$scope', 'loginService', '$http', 'UserService', function($scope, loginService, $http, UserService) {
             $scope.showLoading = false;

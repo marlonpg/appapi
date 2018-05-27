@@ -292,7 +292,11 @@ routes.delete("/product/:id", function(req, res) {
 							res.json({ success: true, message: 'Product has been deleted successfully!' });
 						});
 					} else {
-						res.json({ success: false, message: 'You are not allowed to delete this product!' });
+						return res.status(403).send({ 
+							success: false, 
+							loggedIn: false,
+							message: 'Not Authorized!' 
+						});
 					}
 					
 				},
@@ -307,21 +311,6 @@ routes.delete("/product/:id", function(req, res) {
 			return;
 		}
 	);
-});
-
-//getProductWithoutContact
-app.get("/product/:id", function(req, res) {
-	console.log("getProductById: "+ req.params.id);
-	var id = req.params.id;
-	var ObjectId = require('mongoose').Types.ObjectId; 
-	var query = { "_id" : new ObjectId(id)};
-
-	Product.find(query, function (err, product) {
-		if (err){
-			return res.status(500).send(err);
-		}
-		return res.status(200).send({'product': product});	
-	});
 });
 
 //ALL REGISTERED USERS
