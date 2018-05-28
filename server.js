@@ -8,6 +8,7 @@ var jwt    = require('jsonwebtoken');
 var config = require('./config');
 var User   = require('./models/user');
 var Product   = require('./models/product');
+var DesiredProduct   = require('./models/desiredproduct');
 
 ///////////////////
 //CONFIGURATION
@@ -67,6 +68,61 @@ app.get("/logout", function(req, res) {
 //API ROUTES
 var routes = express.Router(); 
 
+routes.post('/wishlist/:id', function(req, res) {
+	console.log("addProductToWishList "+ req.params.id);
+	DesiredProduct.count({productid: req.params.id},function(err, counter) {
+		if (err){
+			return res.status(500).send(err);
+		}
+		if(counter >= 2){
+			return res.json({ success: false, message: 'Not available! There are '+ counter+' users interested.' });
+		} else {
+			getUserFromSession(req).then(
+				function(userSession) {
+					console.log(userSession);
+					var desiredProduct = new DesiredProduct({ 
+						productid: req.params.id,
+						useremail: userSession.userEmail
+					});
+
+					DesiredProduct.count({productid: req.params.id, useremail: userSession.userEmail}, function(err, counter) {
+						if (err){
+							return res.status(500).send(err);
+						}
+						if(counter > 0){
+							console.log(counter);
+							return res.json({ success: false, message: 'You have already added this product.' });
+						} else {
+							desiredProduct.save(function(err){
+								if(err){
+									console.log(err);
+									res.json({ success: false, message: 'Invalid information!' });
+								} else {
+									res.json({ message: 'Your product has been added successfully!' });
+								}
+							});
+						}
+					});
+				},
+				function(err) {
+					console.log(err);
+					sendAllowedResponse(res, err);
+				}
+			);
+		}
+	});
+});
+
+routes.get('/wishlist/:id', function(req, res) {
+	console.log("getProductWishList "+ req.params.id);
+	DesiredProduct.count({productid: req.params.id},function(err, counter) {
+		if (err){
+			return res.status(500).send(err);
+		}
+			return res.json({ success: true, counter: counter, userlist: [], message: 'Not available! There are ' + counter + ' users interested.' });
+	});
+});
+
 routes.get("/product/:id", function(req, res){
 	console.log("getProduct: "+ req.params.id);
 	var ObjectId = require('mongoose').Types.ObjectId; 
@@ -100,8 +156,7 @@ routes.get("/user-from-product/:id", function(req, res){
 routes.get("/products", function(req, res){
 	console.log("searchProducts: "+ req.query.name);
 	var ObjectId = require('mongoose').Types.ObjectId; 
-	//var query = { "name" : /.* req.query.name .*/i};
-	var query = {"name" :{  $regex: new RegExp("^" + req.query.name, "i") }};
+	var query = {"name" :{  $regex: new RegExp(req.query.name, "i") }};
 	console.log("searchProducts: query:"+ JSON.stringify(query));
 	Product.find(query, function (err, products) {
 		if (err){
@@ -177,7 +232,6 @@ routes.use(function(req, res, next) {
 			if (err) {
 				return res.json({ success: false, message: 'Failed to authenticate token.' });    
 			} else {
-				console.log("@@@DECODED" + JSON.stringify(decoded));
 				req.decoded = decoded;    
 				next();
 			}
@@ -191,17 +245,16 @@ routes.use(function(req, res, next) {
 	}
 });
 
-function getUserEmailFromSession(request) {
+function getUserFromSession(request) {
 	var token = request.body.token || request.query.token || request.headers['x-access-token'];
 	return new Promise(function(resolve, reject) {
 		if (token) {
 			jwt.verify(token, app.get('secret'), function(err, decoded) {      
 				if (err) {
-					console.log("getUserEmailFromSession - Failed to authenticate token."); 
+					console.log("getUserFromSession - Failed to authenticate token."); 
 					reject(err);
 				} else {
 					var user = JSON.parse(JSON.stringify(decoded));
-					console.log("getUserEmailFromSession " + JSON.stringify(user.userEmail));
 					resolve({'userEmail' :user.userEmail, 'isAdmin': user.isAdmin});
 				}
 			});
@@ -286,7 +339,7 @@ routes.post("/product", function(req, res) {
 routes.delete("/product/:id", function(req, res) {
 	var productId = req.params.id;
 	console.log("deleteProduct "+ productId);
-	getUserEmailFromSession(req).then(
+	getUserFromSession(req).then(
 		function(userSession) {
 			hasPermission(productId, userSession.userEmail).then(
 				function(response){
@@ -322,12 +375,21 @@ routes.delete("/product/:id", function(req, res) {
 	);
 });
 
+
 //ALL REGISTERED USERS
 routes.get('/users', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
 });   
+
+function sendAllowedResponse(res, message){
+	console.log("Error message: "+ message);
+	res.status(200).send({ 
+		success: false, 
+		message: message 
+	});
+}
 
 //APPLYING ROUTES
 app.use('/api', routes);

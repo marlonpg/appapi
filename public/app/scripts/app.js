@@ -3,8 +3,7 @@
 angular.module('doeApp', ['ui.router', 'ngResource'])
 	.config([ '$httpProvider',   function($httpProvider) {
 		$httpProvider.interceptors.push('resourceInterceptor');
-    }])
-    /*
+    }])/*
     .config(['$httpProvider', function($httpProvider) {
         if (!$httpProvider.defaults.headers.get) {
             $httpProvider.defaults.headers.get = {};    
@@ -14,8 +13,8 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
         // extra
         $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
         $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
-    }])*/
-    
+    }])
+    */
     .config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('app', {

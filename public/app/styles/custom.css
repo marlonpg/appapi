@@ -102,3 +102,6 @@ body {
 .search-input {
     padding-top: 100px;
 }
+html {
+    overflow-y: scroll;
+}

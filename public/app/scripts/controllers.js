@@ -26,7 +26,7 @@ angular.module('doeApp')
 				$scope.$state.go("app.search", {productName: $scope.searchProductName});
 			}
         }])
-		.controller('ProductController', ['$scope', 'productService', '$stateParams', 'UserService', function($scope, productService, $stateParams, UserService) {
+		.controller('ProductController', ['$scope', 'productService', '$stateParams', 'UserService', 'wishListService', function($scope, productService, $stateParams, UserService, wishListService) {
 			$scope.showWish = false;
 			$scope.showDelete = false;
 			productService.getProduct($stateParams.id).query()
@@ -61,6 +61,23 @@ angular.module('doeApp')
 							function(response) {
 								alert("Você não tem permissão para deletar este produto.");
 								console.log("Error deleteProduct: "+response.status + " " + response.statusText);
+								$scope.message = "Error: "+response.status + " " + response.statusText;
+							}
+						);
+				}
+			};
+			$scope.addProductToWishList = function(){
+				var userWantsThisProduct = window.confirm('Você deseja mesmo obter este Produto "'+ $scope.product.name + '"?');
+				if(userWantsThisProduct){
+					wishListService.addProductToWishList($stateParams.id).save()
+						.$promise.then(
+							function(response) {
+								console.log(response);
+								//$scope.$state.go("app.timeline");
+							},
+							function(response) {
+								alert("Você não tem permissão para adicionar este produto na sua WishList.");
+								console.log("Error addProductToWishList: "+response.status + " " + response.statusText);
 								$scope.message = "Error: "+response.status + " " + response.statusText;
 							}
 						);
@@ -154,6 +171,7 @@ angular.module('doeApp')
 		}])
 		.controller('SearchController', ['$scope', 'productService','$stateParams', function($scope, productService, $stateParams) {		
 			$scope.productName;
+			$scope.showLastSearch;
 			$scope.search = function () {
 				if($scope.searchProductName == undefined || $scope.searchProductName === ''){
 					$scope.productName = $stateParams.productName;

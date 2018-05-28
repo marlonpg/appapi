@@ -32,7 +32,7 @@ angular.module('doeApp')
 		};
 	}])
 	
-	.service('resourceInterceptor', ['$rootScope', 'UserService', function($rootScope, UserService) {
+	.service('resourceInterceptor', ['UserService', function(UserService) {
 		this.request = function(config) {
 			if(UserService.name != '') {
 				config.headers['x-access-token'] = UserService.token;
@@ -41,7 +41,7 @@ angular.module('doeApp')
 		};
 	}])
 
-	.service('productService', ['$rootScope', 'baseURL', '$resource', function($rootScope, baseURL, $resource) {
+	.service('productService', ['$resource', 'baseURL', function($resource, baseURL) {
 		this.getProduct = function(productId) {
 			return $resource(baseURL + "api/product/"+productId);
 		};
@@ -54,6 +54,12 @@ angular.module('doeApp')
 		};
 		this.searchProducts = function(name) {
 			return $resource(baseURL + "api/products?name="+name);
+		};
+	}])
+
+	.service('wishListService', ['$resource', 'baseURL', function($resource, baseURL) {
+		this.addProductToWishList = function(productId) {
+			return $resource(baseURL + "api/wishlist/"+productId);
 		};
 	}])
 	
