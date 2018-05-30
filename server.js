@@ -72,6 +72,7 @@ routes.post('/wishlist/:id', function(req, res) {
 	console.log("addProductToWishList "+ req.params.id);
 	DesiredProduct.count({productid: req.params.id},function(err, counter) {
 		if (err){
+			console.log(err);
 			return res.status(500).send(err);
 		}
 		if(counter >= 2){
@@ -87,6 +88,7 @@ routes.post('/wishlist/:id', function(req, res) {
 
 					DesiredProduct.count({productid: req.params.id, useremail: userSession.userEmail}, function(err, counter) {
 						if (err){
+							console.log(err);
 							return res.status(500).send(err);
 						}
 						if(counter > 0){
@@ -106,7 +108,7 @@ routes.post('/wishlist/:id', function(req, res) {
 				},
 				function(err) {
 					console.log(err);
-					sendAllowedResponse(res, err);
+					return res.status(500).send(err);
 				}
 			);
 		}
@@ -115,11 +117,12 @@ routes.post('/wishlist/:id', function(req, res) {
 
 routes.get('/wishlist/:id', function(req, res) {
 	console.log("getProductWishList "+ req.params.id);
-	DesiredProduct.count({productid: req.params.id},function(err, counter) {
+	DesiredProduct.find({productid: req.params.id},function(err, userList) {
 		if (err){
 			return res.status(500).send(err);
 		}
-			return res.json({ success: true, counter: counter, userlist: [], message: 'Not available! There are ' + counter + ' users interested.' });
+		console.log(userList);
+			return res.json({ success: true, size: userList.length, users: [], message: '' });
 	});
 });
 

@@ -67,8 +67,8 @@ angular.module('doeApp', ['ui.router', 'ngResource'])
                     }
                 }
             })
-			.state('app.timeline', {
-                url: 'timeline',
+			.state('app.home', {
+                url: 'home',
                 views: {
                     'content@': {
                         templateUrl : 'views/timeline.html',

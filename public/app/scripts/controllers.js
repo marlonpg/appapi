@@ -48,6 +48,27 @@ angular.module('doeApp')
 						$scope.message = "Error: "+response.status + " " + response.statusText;
 					}
 			);
+			
+			$scope.getProductWishList = function() {
+				console.log("CALLING getProductWishList");
+				wishListService.get({'productId':$stateParams.id})
+				.$promise.then(
+					function(response) {
+						console.log(response);
+						if(response.success){
+							$scope.wishListNumber = response.size;
+						} else {
+							$scope.wishListNumber = 0;
+						}
+					},
+					function(response) {
+						console.log("Error getProductWishList: "+response.status + " " + response.statusText);
+						$scope.message = "Error: "+response.status + " " + response.statusText;
+					}
+				);
+			}
+
+			$scope.getProductWishList();
 
 			$scope.deleteProduct = function(){
 				var deleteProduct = window.confirm('Você quer mesmo deletar o Produto "'+ $scope.product.name + '"?');
@@ -56,7 +77,7 @@ angular.module('doeApp')
 						.$promise.then(
 							function(response) {
 								console.log(response);
-								$scope.$state.go("app.timeline");
+								$scope.$state.go("app.home");
 							},
 							function(response) {
 								alert("Você não tem permissão para deletar este produto.");
@@ -69,23 +90,21 @@ angular.module('doeApp')
 			$scope.addProductToWishList = function(){
 				var userWantsThisProduct = window.confirm('Você deseja mesmo obter este Produto "'+ $scope.product.name + '"?');
 				if(userWantsThisProduct){
-					wishListService.addProductToWishList($stateParams.id).save()
-						.$promise.then(
-							function(response) {
-								console.log(response);
-								if(response.success){
-
-								} else {
-									alert("Já tem outros dois usuários interessados no produto.");
-								}
-								//$scope.$state.go("app.timeline");
-							},
-							function(response) {
-								console.log("Error addProductToWishList: "+response.status + " " + response.statusText);
-								console.log("Error addProductToWishList: "+response.status + " " + response.statusText);
-								$scope.message = "Error: "+response.status + " " + response.statusText;
+					wishListService.save({'productId':$stateParams.id},{})
+					.$promise.then(
+						function(response) {
+							if(response.success){
+								$scope.getProductWishList();
+								alert(response.message);
+							} else {
+								alert(response.message);
 							}
-						);
+						},
+						function(response) {
+							console.log("Error addProductToWishList: "+response.status + " " + response.statusText);
+							$scope.message = "Error: "+response.status + " " + response.statusText;
+						}
+					);
 				}
 			}
 			var changeButtonsVisibility = function(){
@@ -115,7 +134,7 @@ angular.module('doeApp')
 							$scope.showLoading = false;
 							LocalStorage.setLocalStorage(response.token, response.name, response.email, response.isAdmin);
 							
-							$scope.$state.go("app.timeline");
+							$scope.$state.go("app.home");
 						} else {
 							LocalStorage.cleanLocalStorage();
 							$scope.messageClass = "alert alert-danger";
@@ -154,7 +173,7 @@ angular.module('doeApp')
 			$scope.saveProduct = function () {
 				createNewProduct(UserService.token)
 				.done(function(data) {
-					$scope.$state.go("app.timeline");
+					$scope.$state.go("app.home");
 					console.log('success', data) 
 				})
 				.fail(function(xhr) {
