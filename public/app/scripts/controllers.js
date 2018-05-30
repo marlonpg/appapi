@@ -2,9 +2,9 @@
 
 angular.module('doeApp')
         .controller('ContactController', ['$scope', function($scope) {
-			/* NOT WORKING YET
-
-            };*/
+			$scope.sendFeedback = function(){
+				alert("Em construção :). Para entrar em contato, mande email para gambasoftware@gmail.com");
+			}
         }])
 		.filter('escape', function() {
 			return window.encodeURIComponent;
@@ -42,7 +42,7 @@ angular.module('doeApp')
 				.$promise.then(
 					function(response) {
 						$scope.userContact = response;
-						$scope.changeButtonsVisibility();
+						changeButtonsVisibility();
 					},
 					function(response) {
 						$scope.message = "Error: "+response.status + " " + response.statusText;
@@ -73,21 +73,26 @@ angular.module('doeApp')
 						.$promise.then(
 							function(response) {
 								console.log(response);
+								if(response.success){
+
+								} else {
+									alert("Já tem outros dois usuários interessados no produto.");
+								}
 								//$scope.$state.go("app.timeline");
 							},
 							function(response) {
-								alert("Você não tem permissão para adicionar este produto na sua WishList.");
+								console.log("Error addProductToWishList: "+response.status + " " + response.statusText);
 								console.log("Error addProductToWishList: "+response.status + " " + response.statusText);
 								$scope.message = "Error: "+response.status + " " + response.statusText;
 							}
 						);
 				}
 			}
-			$scope.changeButtonsVisibility = function(){
-				if(UserService.isAdmin || UserService.email && UserService.email == $scope.userContact.userEmail){
+			var changeButtonsVisibility = function(){
+				if((UserService.isAdmin === true || UserService.isAdmin === 'true')  || (UserService.email === $scope.userContact.userEmail)){
 					$scope.showWish = false;
 					$scope.showDelete = true;
-				} else if(UserService && UserService.email && UserService.email !== $scope.userContact.userEmail){
+				} else if((UserService.isAdmin === false || UserService.isAdmin === 'false') && (UserService.email !== $scope.userContact.userEmail)){
 					$scope.showWish = true;
 					$scope.showDelete = false;
 				} else {
@@ -96,7 +101,7 @@ angular.module('doeApp')
 				}
 			}
         }])
-		.controller('LoginController', ['$scope', 'loginService', 'UserService', function($scope, loginService, UserService) {
+		.controller('LoginController', ['$rootScope', '$scope', 'loginService', 'UserService', 'LocalStorage', function($rootScope, $scope, loginService, UserService, LocalStorage) {
             $scope.showLoading = false;
             $scope.message = "Loading ...";
 			$scope.login = function(){
@@ -104,16 +109,15 @@ angular.module('doeApp')
 				loginService.login().save($scope.user).$promise.then(
                     function(response) {
 						if(response.success){
+							LocalStorage.cleanLocalStorage();
 							$scope.user = {email:"", password:""};
 							$scope.loginForm.$setPristine();
 							$scope.showLoading = false;
-							UserService.token = response.token;
-							UserService.name = response.name;
-							UserService.email = response.email;
-							UserService.isAdmin = response.isAdmin;
-							//route back to home;
+							LocalStorage.setLocalStorage(response.token, response.name, response.email, response.isAdmin);
+							
 							$scope.$state.go("app.timeline");
 						} else {
+							LocalStorage.cleanLocalStorage();
 							$scope.messageClass = "alert alert-danger";
 							$scope.message = "Error: "+response.message;
 						}
@@ -166,8 +170,15 @@ angular.module('doeApp')
 				});;
 			}
         }])		
-		.controller('MenuController', ['$scope', 'UserService', function($scope, UserService) {
-			$scope.name = UserService.name;
+		.controller('MenuController', ['$scope', 'UserService', 'SharedService', 'LocalStorage', function($scope, UserService, sharedService, LocalStorage) {
+			$scope.$on('handleBroadcast', function() {
+				$scope.name = sharedService.displayName;
+			});
+			$scope.logout = function(){
+				console.log("logout");
+				LocalStorage.cleanLocalStorage();
+				$scope.$state.go("app");
+			}
 		}])
 		.controller('SearchController', ['$scope', 'productService','$stateParams', function($scope, productService, $stateParams) {		
 			$scope.productName;
