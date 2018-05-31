@@ -67,7 +67,9 @@ angular.module('doeApp')
 		};
 	}])
 	.service('wishListService', ['$resource', 'baseURL', function($resource, baseURL) {
-		return $resource(baseURL + "api/wishlist/:productId", {productId: '@id'});
+		var date = new Date();
+		var timestamp = date.getTime();
+		return $resource(baseURL + "api/wishlist/:productId" + "?date="+timestamp, {productId: '@id'});
 	}])
 	.service('LocalStorage', ['UserService', function(UserService) {
 		this.cleanLocalStorage = function() {

@@ -29,46 +29,6 @@ angular.module('doeApp')
 		.controller('ProductController', ['$scope', 'productService', '$stateParams', 'UserService', 'wishListService', function($scope, productService, $stateParams, UserService, wishListService) {
 			$scope.showWish = false;
 			$scope.showDelete = false;
-			productService.getProduct($stateParams.id).query()
-				.$promise.then(
-					function(response) {
-						$scope.product = response[0];
-					},
-					function(response) {
-						$scope.message = "Error: "+response.status + " " + response.statusText;
-					}
-			);
-			productService.getUserFromProduct($stateParams.id).get()
-				.$promise.then(
-					function(response) {
-						$scope.userContact = response;
-						changeButtonsVisibility();
-					},
-					function(response) {
-						$scope.message = "Error: "+response.status + " " + response.statusText;
-					}
-			);
-			
-			$scope.getProductWishList = function() {
-				console.log("CALLING getProductWishList");
-				wishListService.get({'productId':$stateParams.id})
-				.$promise.then(
-					function(response) {
-						console.log(response);
-						if(response.success){
-							$scope.wishListNumber = response.size;
-						} else {
-							$scope.wishListNumber = 0;
-						}
-					},
-					function(response) {
-						console.log("Error getProductWishList: "+response.status + " " + response.statusText);
-						$scope.message = "Error: "+response.status + " " + response.statusText;
-					}
-				);
-			}
-
-			$scope.getProductWishList();
 
 			$scope.deleteProduct = function(){
 				var deleteProduct = window.confirm('Você quer mesmo deletar o Produto "'+ $scope.product.name + '"?');
@@ -87,6 +47,30 @@ angular.module('doeApp')
 						);
 				}
 			};
+			
+			$scope.getProductWishList = function() {
+				console.log("CALLING getProductWishList");
+				wishListService.get({'productId':$stateParams.id})
+				.$promise.then(
+					function(response) {
+						console.log(response);
+						if(response.success){
+							$scope.wishListNumber = response.size;
+							console.log(response.users);
+							console.log(UserService.email);
+							console.log(response.users.includes(UserService.email));
+							$scope.isDesiring = response.users.includes(UserService.email);
+						} else {
+							$scope.wishListNumber = 0;
+						}
+					},
+					function(response) {
+						console.log("Error getProductWishList: "+response.status + " " + response.statusText);
+						$scope.message = "Error: "+response.status + " " + response.statusText;
+					}
+				);
+			}
+
 			$scope.addProductToWishList = function(){
 				var userWantsThisProduct = window.confirm('Você deseja mesmo obter este Produto "'+ $scope.product.name + '"?');
 				if(userWantsThisProduct){
@@ -107,6 +91,28 @@ angular.module('doeApp')
 					);
 				}
 			}
+
+			$scope.removeProductFromWishList = function(){
+				var userDontWantsThisProduct = window.confirm('Você deseja mesmo SAIR da fila de interessados pelo Produto "'+ $scope.product.name + '"?');
+				if(userDontWantsThisProduct){
+					wishListService.remove({'productId':$stateParams.id},{})
+					.$promise.then(
+						function(response) {
+							if(response.success){
+								$scope.getProductWishList();
+								alert(response.message);
+							} else {
+								alert(response.message);
+							}
+						},
+						function(response) {
+							console.log("Error removeProductFromWishList: "+response.status + " " + response.statusText);
+							$scope.message = "Error: "+response.status + " " + response.statusText;
+						}
+					);
+				}
+			}
+
 			var changeButtonsVisibility = function(){
 				if((UserService.isAdmin === true || UserService.isAdmin === 'true')  || (UserService.email === $scope.userContact.userEmail)){
 					$scope.showWish = false;
@@ -119,6 +125,29 @@ angular.module('doeApp')
 					$scope.showDelete = false;
 				}
 			}
+						
+			productService.getProduct($stateParams.id).query()
+				.$promise.then(
+					function(response) {
+						$scope.product = response[0];
+					},
+					function(response) {
+						$scope.message = "Error: "+response.status + " " + response.statusText;
+					}
+			);
+			
+			productService.getUserFromProduct($stateParams.id).get()
+				.$promise.then(
+					function(response) {
+						$scope.userContact = response;
+						changeButtonsVisibility();
+					},
+					function(response) {
+						$scope.message = "Error: "+response.status + " " + response.statusText;
+					}
+			);
+
+			$scope.getProductWishList();
         }])
 		.controller('LoginController', ['$rootScope', '$scope', 'loginService', 'UserService', 'LocalStorage', function($rootScope, $scope, loginService, UserService, LocalStorage) {
             $scope.showLoading = false;
