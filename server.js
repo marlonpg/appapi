@@ -70,12 +70,20 @@ app.use(function(req, res, next) {
 });
 
 app.get("/products", function(req, res) {
-  console.log("Get all products");
-  
-	Product.find(function(err, products) {
+	console.log("Get products");
+	var limit = req.query.limit;
+	var donated = req.query.donated;
+	if (typeof limit === "undefined") {
+		limit = 3;
+	}
+	if (typeof donated === "undefined") {
+		donated = false;
+	}
+	Product.find({'donated': donated}).sort({'createdDate': -1}).limit(limit).exec(function(err, products) {
 		if (err){
 			res.send(err);
 		}
+		console.log(products);
 		res.json(products);
 	});
 });
@@ -145,7 +153,6 @@ routes.get("/products", function(req, res){
 	console.log("searchProducts: "+ req.query.name);
 	var ObjectId = require('mongoose').Types.ObjectId; 
 	var query = {"name" :{  $regex: new RegExp(req.query.name, "i") }};
-	console.log("searchProducts: query:"+ JSON.stringify(query));
 	Product.find(query, function (err, products) {
 		if (err){
 			return res.status(500).send(err);

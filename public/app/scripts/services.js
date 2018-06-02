@@ -11,13 +11,13 @@ angular.module('doeApp')
 	  };
 	})
 	
-	.factory('timelineFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-		var timelineFactory = {};
+	.factory('homeFactory', ['$resource', 'baseURL', function($resource, baseURL) {
+		var homeFactory = {};
 
-		timelineFactory.getTimelineProducts = function() {
-			return $resource(baseURL + "products");
+		homeFactory.getHomeProducts = function(donated) {
+			return $resource(baseURL + "products?donated="+donated);
 		};
-		return timelineFactory;
+		return homeFactory;
 	}])
 
 	.service('loginService', ['$resource', 'baseURL', function($resource, baseURL) {

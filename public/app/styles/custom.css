@@ -46,6 +46,20 @@ body {
     background-repeat:   no-repeat;
     background-size:     cover;
 }
+
+.media:hover {
+    opacity: 1.0;
+    cursor: pointer;
+    background-color:rgba(255,255,255,.5);
+    color: orangered;
+    
+}
+
+.media {
+    opacity: 0.7;
+
+}
+
 .img-product {
     position: relative;
     width:  300px;
@@ -104,4 +118,27 @@ body {
 }
 html {
     overflow-y: scroll;
+}
+
+.textwrap {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.griditem{
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.subtitles {
+    padding: .75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #eceeef;
+    border-radius: .25rem;
+}
+
+.tablegrid{
+    padding-left: 15px;
+    padding-right: 15px;
 }
