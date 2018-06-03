@@ -13,8 +13,15 @@
 		</div>
 		<div class="textwrap" ng-controller="ProductController">
 			<div class="row row-content">
-				<div class="col-6 col-xs-9 col-sm-6">
-					<h4 class="media-heading">{{product.name}} <button type="button" class="btn btn-sm btn-donated" ng-show="showDelete"><i class="far fa-check-circle"></i><span></span></button></h4> 
+				<div class="col-6 col-xs-9 col-sm-8">
+					<h4 class="media-heading">
+						{{product.name}} 
+						<button type="button" class="btn btn-sm btn-donated" ng-show="showDelete" ng-click="updateProduct()">
+							<i class="far fa-check-circle"></i>
+							<span></span>
+						</button>
+						<p ng-show="product.status === 'donated'"  class="text-muted">  Anúncio finalizado, situação: {{product.status === 'donated' ? 'Doado' : ''}}.</p>
+					</h4> 
 					<a><div class="img-product media-object" style="background-image:url(\images{{product.filePath | escape}}"></div></a>
 					<button type="button" class="btn btn-success btn-sm" ng-show="showWish && !isDesiring &&(wishListNumber < 2 )" ng-click="addProductToWishList()">
 						Eu quero! 
@@ -25,7 +32,7 @@
 					<button type="button" class="btn btn-danger btn-sm" ng-show="showDelete" ng-click="deleteProduct()" >
 						Deletar
 					</button>
-					<button type="button" id="usersWishList" class="btn btn-info btn-sm" data-toggle="tooltip2" data-placement="right" title="{{usersWishList}}">
+					<button type="button" id="usersWishList" class="btn btn-info btn-sm" data-toggle="tooltip2" ng-show="product.status !== 'donated'" data-placement="right" title="{{usersWishList}}">
 						interessados <span class="badge">{{wishListNumber}}</span>
 					</button>
 					

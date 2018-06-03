@@ -43,20 +43,23 @@ angular.module('doeApp')
 	}])
 
 	.service('productService', ['$resource', 'baseURL', function($resource, baseURL) {
-		this.getProduct = function(productId) {
-			return $resource(baseURL + "api/product/"+productId);
-		};
+			return $resource(baseURL + "api/product/:productId", {productId: '@id'}, {
+				update: {method: 'PUT'}
+			});
+	}])
+
+	//REVIEW
+	.service('tempService', ['$resource', 'baseURL', function($resource, baseURL) {
 		this.getUserFromProduct = function(productId) {
 			console.log("getUserFromProduct");
 			return $resource(baseURL + "api/user-from-product/"+productId);
 		};
-		this.deleteProduct = function(productId) {
-			return $resource(baseURL + "api/product/"+productId);
-		};
+		//Refactor service to be included into productService
 		this.searchProducts = function(name, status, limit, sort) {
 			return $resource(baseURL + "api/products?name="+name+'&status='+status+'&limit='+limit+'&sort='+sort);
 		};
 	}])
+
 	.service('wishListService', ['$resource', 'baseURL', function($resource, baseURL) {
 		return $resource(baseURL + "api/wishlist/:productId", {productId: '@id'});
 	}])

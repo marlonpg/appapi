@@ -146,7 +146,7 @@ routes.get('/wishlist/:id', function(req, res) {
 		},
 		function(error){
 			console.log(err);
-			return res.status(500).send(err);
+			res.status(500).send({ message: 'Internal Server Error!'});
 		}
 	);
 });
@@ -158,7 +158,8 @@ routes.get("/product/:id", function(req, res){
 
 	Product.find(query, function (err, product) {
 		if (err){
-			return res.status(500).send(err);
+			console.log(err);
+			res.status(500).send({ message: 'Internal Server Error!'});
 		}
 		return res.status(200).send(product);	
 	});
@@ -215,7 +216,7 @@ routes.post('/signup', function(req, res) {
 	newUser.save(function(err){
 		if(err){
 			console.log(err);
-			res.status(500).send({ message: 'Internal Error!' });
+			res.status(500).send({ message: 'Internal Server Error!'});
 		} else {
 			res.json({ message: 'Sua conta foi criada com sucesso!' });
 		}
@@ -273,8 +274,8 @@ function getProduct(productId) {
 	
 		Product.find(query, function (err, product) {
 			if (err){
-				console.log("getProduct - Failed to get product from mongodb.");
-				reject(err);
+				console.log(err);
+				res.status(500).send({ message: 'Internal Server Error!'});
 			}
 			resolve(product);
 		});
@@ -371,11 +372,48 @@ routes.post("/product", function(req, res) {
 	newProduct.save(function(err){
 		if(err){
 			console.log(err);
-			return;
+			res.status(500).send({ message: 'Internal Server Error!'});
 		}
 
 		res.json({ product: newProduct });
 	});
+});
+
+
+//updateProduct
+routes.put("/product/:id", function(req, res) {
+	var productId = req.params.id;
+	console.log("updateProduct "+ productId);
+	getUserFromSession(req).then(
+		function(userSession) {
+			getProduct(productId).then(
+				function(response){
+					var user = JSON.parse(JSON.stringify(response[0]));
+					if(userSession.isAdmin || user.userEmail == userSession.userEmail){
+						console.log("Response -getProduct "+ user);
+						Product.update({ _id: productId }, { $set: { status: req.body.status }}, function(err) {
+							if(err){
+								console.log(err);
+								res.status(500).send({ message: 'Internal Server Error!'});
+							}
+							res.json({ message: 'Produto foi atualizado com sucesso!' });
+						});
+					} else {
+						console.log(err);
+						return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
+					}
+				},
+				function(err) {
+					console.log("ERROR getProduct ",err);
+					res.status(500).send({ message: 'Internal Server Error!'});
+				}
+			);
+		},
+		function(err) {
+			console.log(err);
+			return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
+		}
+	);
 });
 
 //deleteProduct
@@ -392,27 +430,25 @@ routes.delete("/product/:id", function(req, res) {
 						Product.remove({ _id: productId }, function(err) {
 							if(err){
 								console.log(err);
-								return;
+								res.status(500).send({ message: 'Internal Server Error!'});
 							}
 							res.json({ success: true, message: 'Produto foi deletado com sucesso!' });
 						});
 					} else {
-						return res.status(403).send({ 
-							success: false,
-							message: 'Not Authorized!' 
-						});
+						console.log(err);
+						return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
 					}
 					
 				},
 				function(err) {
-					console.log("ERROR getProduct ",err);
-					return;
+					console.log(err);
+					res.status(500).send({ message: 'Internal Server Error!'});
 				}
 			);
 		},
 		function(err) {
 			console.log(err);
-			return;
+			return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
 		}
 	);
 });
@@ -422,7 +458,7 @@ routes.post('/wishlist/:id', function(req, res) {
 	WishList.count({productid: req.params.id},function(err, counter) {
 		if (err){
 			console.log(err);
-			return res.status(500).send(err);
+			res.status(500).send({ message: 'Internal Server Error!'});
 		}
 		if(counter >= 2){
 			return res.json({ success: false, message: 'Não está disponível no momento! Há '+ counter+' usuários interessados.' });
@@ -438,7 +474,7 @@ routes.post('/wishlist/:id', function(req, res) {
 					WishList.count({productid: req.params.id, useremail: userSession.userEmail}, function(err, counter) {
 						if (err){
 							console.log(err);
-							return res.status(500).send(err);
+							res.status(500).send({ message: 'Internal Server Error!'});
 						}
 						if(counter > 0){
 							console.log(counter);
@@ -447,7 +483,7 @@ routes.post('/wishlist/:id', function(req, res) {
 							wishList.save(function(err){
 								if(err){
 									console.log(err);
-									return res.status(500).send(err);
+									res.status(500).send({ message: 'Internal Server Error!'});
 								} else {
 									res.json({ success: true, message: 'Você está na fila de interessados em obter este produto!' });
 								}
@@ -457,7 +493,7 @@ routes.post('/wishlist/:id', function(req, res) {
 				},
 				function(err) {
 					console.log(err);
-					return res.status(500).send(err);
+					return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
 				}
 			);
 		}
@@ -471,7 +507,7 @@ routes.delete('/wishlist/:id', function(req, res) {
 			WishList.remove({productid: req.params.id, useremail: userSession.userEmail}, function(err, message) {
 				if (err){
 					console.log(err);
-					return res.status(500).send(err);
+					res.status(500).send({ message: 'Internal Server Error!'});
 				} else {
 					console.log("removeProductFromWishList "+message);
 					res.json({ success: true, message: 'Você NÃO está mais fila de interessados em obter este produto!' });
@@ -480,7 +516,7 @@ routes.delete('/wishlist/:id', function(req, res) {
 		},
 		function(err) {
 			console.log(err);
-			return res.status(500).send(err);
+			return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
 		}
 	);
 });
@@ -492,14 +528,15 @@ routes.get("/user-from-product/:id", function(req, res){
 
 	Product.findOne(query, function (err, product) {
 		if (err){
-			return res.status(500).send(err);
+			console.log(err);
+			res.status(500).send({ message: 'Internal Server Error!'});
 		}
 		hasPermissionsToSeeContactInfo(req, product.userEmail).then(
 			function(response){
 				User.findOne({email: product.userEmail}, function(err, user) {
 					if (err){
 						console.log(err);
-						return res.status(500).send(err);
+						res.status(500).send({ message: 'Internal Server Error!'});
 					}
 					if (user) {
 						if(response){
@@ -513,7 +550,7 @@ routes.get("/user-from-product/:id", function(req, res){
 			}, 
 			function(error){
 				console.log(err);
-				return res.status(500).send(err);
+				return res.status(403).send({ message: 'Acesso não autorizado ou sessão expirada!'});
 			}
 		);
 	});
