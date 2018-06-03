@@ -5,6 +5,11 @@ mongod.exe --dbpath C:\Users\Marlon\Documents\develop\mongodb\data
 
 http://localhost:8080/app/index.html#/
 
+
+API
+/api/product - POST - GET - PUT - DELETE
+
+
 cores legais
 #0B2028 escura
 #F4F1EA quase branca 
