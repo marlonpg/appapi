@@ -9,9 +9,9 @@ angular.module('doeApp')
 		.filter('escape', function() {
 			return window.encodeURIComponent;
 		})
-		.controller('HomeController', ['$scope', 'homeFactory', function($scope, homeFactory) {
+		.controller('HomeController', ['$scope', 'productService', function($scope, productService) {
             $scope.message = "Loading ...";			
-            homeFactory.getHomeProducts(false).query().$promise.then(
+            productService.searchProducts('','available', 3, 'desc').query().$promise.then(
 				function(response) {
 					$scope.recentAddedProducts = response;
 				},
@@ -19,7 +19,7 @@ angular.module('doeApp')
 					$scope.message = "Error: "+response.status + " " + response.statusText;
 				}
 			);
-			homeFactory.getHomeProducts(true).query().$promise.then(
+			productService.searchProducts('','donated', 3, 'desc').query().$promise.then(
 				function(response) {
 					$scope.donatedProducts = response;
 				},
@@ -69,8 +69,10 @@ angular.module('doeApp')
 						$scope.isDesiring = response.users.includes(UserService.email);
 						if(response.users.length > 1){
 							$scope.usersWishList = response.users[0] + ' e ' +response.users[1];
-						} else {
+						} else if(response.users.length == 1){
 							$scope.usersWishList = response.users[0];
+						} else {
+							$scope.usersWishList = '';
 						}
 						$(function () {
 							$('[data-toggle="tooltip2"]').tooltip();
@@ -261,7 +263,7 @@ angular.module('doeApp')
 				} else {
 					$scope.productName = $scope.searchProductName;
 				}
-				productService.searchProducts($scope.productName).query()
+				productService.searchProducts($scope.productName, '','','').query()
                 .$promise.then(
                     function(response) {
                         $scope.products = response;

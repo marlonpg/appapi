@@ -12,6 +12,6 @@ module.exports = mongoose.model('Product', new Schema({
 	category: String,
 	expirationDate: String,
 	filePath: String,
-	donated: { type: Boolean, default: false },
+	status: { type: String, default: 'available' },
 	createdDate: { type: Date, default: Date.now }
 }));

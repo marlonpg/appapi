@@ -10,15 +10,6 @@ angular.module('doeApp')
 		  email : ''
 	  };
 	})
-	
-	.factory('homeFactory', ['$resource', 'baseURL', function($resource, baseURL) {
-		var homeFactory = {};
-
-		homeFactory.getHomeProducts = function(donated) {
-			return $resource(baseURL + "products?donated="+donated);
-		};
-		return homeFactory;
-	}])
 
 	.service('loginService', ['$resource', 'baseURL', function($resource, baseURL) {
 		this.login = function() {
@@ -62,8 +53,8 @@ angular.module('doeApp')
 		this.deleteProduct = function(productId) {
 			return $resource(baseURL + "api/product/"+productId);
 		};
-		this.searchProducts = function(name) {
-			return $resource(baseURL + "api/products?name="+name);
+		this.searchProducts = function(name, status, limit, sort) {
+			return $resource(baseURL + "api/products?name="+name+'&status='+status+'&limit='+limit+'&sort='+sort);
 		};
 	}])
 	.service('wishListService', ['$resource', 'baseURL', function($resource, baseURL) {

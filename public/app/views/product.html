@@ -14,7 +14,7 @@
 		<div class="textwrap" ng-controller="ProductController">
 			<div class="row row-content">
 				<div class="col-6 col-xs-9 col-sm-6">
-					<h3 class="media-heading">{{product.name}}</h3>
+					<h4 class="media-heading">{{product.name}} <button type="button" class="btn btn-sm btn-donated" ng-show="showDelete"><i class="far fa-check-circle"></i><span></span></button></h4> 
 					<a><div class="img-product media-object" style="background-image:url(\images{{product.filePath | escape}}"></div></a>
 					<button type="button" class="btn btn-success btn-sm" ng-show="showWish && !isDesiring &&(wishListNumber < 2 )" ng-click="addProductToWishList()">
 						Eu quero! 
@@ -28,12 +28,13 @@
 					<button type="button" id="usersWishList" class="btn btn-info btn-sm" data-toggle="tooltip2" data-placement="right" title="{{usersWishList}}">
 						interessados <span class="badge">{{wishListNumber}}</span>
 					</button>
+					
 				</div>
 			</div>
 			<div class="row row-content">
 				<div class="col-9 col-xs-9 col-sm-9">
 					<div class="media-body">
-						<h4 class="media-heading">Descrição</h4>
+						<h5 class="media-heading">Descrição</h5>
 						<p class="col-9 col-xs-9 col-sm-9 card-text">{{product.description}}</p>
 					</div>
 				</div>
@@ -41,7 +42,7 @@
 			<div class="row row-content">
 				<div class="col-6 col-xs-9 col-sm-6">
 					<div class="media-body">
-						<h4 class="media-heading">Localização</h4>
+						<h5 class="media-heading">Localização</h5>
 						<div class="col-9 col-xs-12 col-sm-9">Cidade: {{product.city}}</div>
 						<div class="col-9 col-xs-12 col-sm-9">Estado: {{product.state}}</div>
 						<div class="col-9 col-xs-12 col-sm-9">CEP: {{product.zipCode}}</div>
@@ -49,7 +50,7 @@
 				</div>
 				<div class="col-6 col-xs-6 col-sm-6">
 					<div class="media-body" data-toggle="tooltip" data-placement="top" title="Visível somente para interessados.">
-						<h4 class="media-heading">Contato</h4>
+						<h5 class="media-heading">Contato</h5>
 						<div class="col-9 col-xs-12 col-sm-9">Nome: {{userContact.userName}}</div>
 						<div class="col-9 col-xs-12 col-sm-9">Telefone: {{userContact.userCellphone}}</div>
 						<div class="col-9 col-xs-12 col-sm-9">Email: {{userContact.userEmail}}</div>
