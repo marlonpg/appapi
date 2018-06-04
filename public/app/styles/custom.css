@@ -3,7 +3,9 @@ body {
 	font-size: 14px;
 	padding-bottom: 50px;
 }
-
+nav {
+    padding: .25rem 1rem;
+}
 .form-login{
     max-width: 500px;
     padding: 15px;
@@ -66,6 +68,23 @@ body {
     background-repeat:   no-repeat;
     background-size:     cover;
 }
+.img-product-parent{
+    vertical-align: middle;
+    display: table-cell;
+    height: 400px;
+    width: 400px;
+    border-style: groove;
+    border-color: #8080800a;
+    overflow: hidden;
+    text-align: center;
+}
+
+.img-product-new{
+    max-height: 400px;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
 .result li {
     margin-top: 15px;
     background-color: #eceeef;

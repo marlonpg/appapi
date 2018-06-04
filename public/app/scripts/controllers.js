@@ -68,6 +68,8 @@ angular.module('doeApp')
 					productService.update({'productId':$stateParams.id}, $scope.product)
 					.$promise.then(
 						function(response) {
+							$scope.getProductWishList();
+							$scope.getUserFromProduct();
 							console.log(response);
 						},
 						function(response) {
@@ -240,6 +242,8 @@ angular.module('doeApp')
 						$scope.signupForm.$setPristine();
 						$scope.messageClass = "alert alert-success alert-dismissable";
 						$scope.message = response.message;
+						alert(response.message);
+						$scope.$state.go("app.login");
                     },
                     function(response) {
                         $scope.message = "Error: "+response.status + " " + response.statusText;

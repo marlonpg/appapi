@@ -13,7 +13,7 @@
 		</div>
 		<div class="textwrap" ng-controller="ProductController">
 			<div class="row row-content">
-				<div class="col-6 col-xs-9 col-sm-8">
+				<div class="col-6 col-xs-12 col-sm-8">
 					<h4 class="media-heading">
 						{{product.name}} 
 						<button type="button" class="btn btn-sm btn-donated" ng-show="showDelete" ng-click="updateProduct()">
@@ -22,7 +22,9 @@
 						</button>
 						<p ng-show="product.status === 'donated'"  class="text-muted">  Anúncio finalizado, situação: {{product.status === 'donated' ? 'Doado' : ''}}.</p>
 					</h4> 
-					<a><div class="img-product media-object" style="background-image:url(\images{{product.filePath | escape}}"></div></a>
+					<div class="img-product-parent">
+						<img class= "img-product-new" src="images{{product.filePath | escape}}">
+					</div>
 					<button type="button" class="btn btn-success btn-sm" ng-show="showWish && !isDesiring &&(wishListNumber < 2 )" ng-click="addProductToWishList()">
 						Eu quero! 
 					</button>
