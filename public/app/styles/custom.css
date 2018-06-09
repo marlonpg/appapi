@@ -59,7 +59,9 @@ body {
 .media {
     opacity: 0.7;
 }
-
+.media-left{
+    padding-right: 10px;
+}
 .img-product {
     position: relative;
     width:  300px;
@@ -88,6 +90,7 @@ body {
 .result li {
     margin-top: 15px;
     background-color: #eceeef;
+    margin-left: -30px;
 }
 
 .result li:hover {
@@ -95,6 +98,9 @@ body {
     background-color:lightgray;
 }
 
+.closeNavBar{
+    
+}
 
 .onhover:hover{
     cursor: pointer;
