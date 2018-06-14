@@ -194,14 +194,13 @@ angular.module('doeApp')
 				.$promise.then(
 					function(response) {
 						$scope.product = response[0];
+						$scope.getUserFromProduct();
+						$scope.getProductWishList();
 					},
 					function(response) {
 						$scope.message = "Error: "+response.status + " " + response.statusText;
 					}
 			);
-
-			$scope.getUserFromProduct();
-			$scope.getProductWishList();
 			$(function () {
 				$('[data-toggle="tooltip"]').tooltip()
 			})
@@ -256,24 +255,29 @@ angular.module('doeApp')
 			}
         }])
 		.controller('ProductRegisterController', ['$scope', 'UserService', function($scope, UserService) {
-            $scope.message = "Loading ...";
+			$scope.message = "Loading ...";
+			$scope.productName = '';
 			$scope.saveProduct = function () {
-				createNewProduct(UserService.token)
-				.done(function(data) {
-					$scope.$state.go("app.home");
-					console.log('success', data) 
-				})
-				.fail(function(xhr) {
-					if(!xhr.responseJSON.loggedIn){
-						var response = confirm("Você precisa estar logado para realizar esta operação!");
-						if (response == true) {
-							$scope.$state.go("app.login");
+				if(productName == ''){
+					alert('Nome do produto inválido!');
+				} else {
+					createNewProduct(UserService.token)
+					.done(function(data) {
+						$scope.$state.go("app.home");
+						console.log('success', data) 
+					})
+					.fail(function(xhr) {
+						if(!xhr.responseJSON.loggedIn){
+							var response = confirm("Você precisa estar logado para realizar esta operação!");
+							if (response == true) {
+								$scope.$state.go("app.login");
+							}
+						} else {
+							alert(xhr.responseJSON.message)
 						}
-					} else {
-						alert(xhr.responseJSON.message)
-					}
-					console.log('error', xhr);
-				});;
+						console.log('error', xhr);
+					});;
+				}
 			}
         }])		
 		.controller('MenuController', ['$scope', 'UserService', 'SharedService', 'LocalStorage', function($scope, UserService, sharedService, LocalStorage) {
